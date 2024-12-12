@@ -1,13 +1,13 @@
 "use client";
 
 import { GameMasterContextProvider } from "@/Contexts/GameMasterContextProvider";
-import StartPage from "./startPage";
+import GameWindow from "./GameWindow";
 
 export default function Home() {
   return (
     <GameMasterContextProvider>
       <div>
-        <StartPage />
+        <GameWindow />
       </div>
     </GameMasterContextProvider>
   );

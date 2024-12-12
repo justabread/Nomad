@@ -13,7 +13,7 @@ export interface SelectProps {
 const Select: FC<SelectProps> = ({ label, options, onChange, value }) => {
   return (
     <>
-      <label>{label}</label>
+      <label>{label}: </label>
       <select value={value} onChange={onChange}>
         {options.map(({ title, value }) => {
           return (

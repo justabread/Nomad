@@ -5,6 +5,7 @@ import {
   MindTraitType,
   BodyTraitType,
 } from "@/Types/PlayerTypes";
+import { LocationType } from "@/Types/LocationTypes";
 
 interface CanRenderInterface {
   preparation: boolean;
@@ -16,6 +17,8 @@ interface GameMasterContextInterface {
   setPlayer: Dispatch<SetStateAction<PlayerInterface>>;
   canRender: CanRenderInterface;
   setCanRender: Dispatch<SetStateAction<CanRenderInterface>>;
+  playerLocation: LocationType;
+  setPlayerLocation: Dispatch<SetStateAction<LocationType>>;
 }
 
 const InitialPlayerState: PlayerInterface = {
@@ -30,6 +33,8 @@ export const GameMasterContext = createContext<GameMasterContextInterface>({
   setPlayer: () => {},
   canRender: { preparation: true, forest: false },
   setCanRender: () => {},
+  playerLocation: LocationType.LOCATION_START,
+  setPlayerLocation: () => {},
 });
 
 export const GameMasterContextProvider = ({
@@ -43,9 +48,20 @@ export const GameMasterContextProvider = ({
     forest: false,
   });
 
+  const [playerLocation, setPlayerLocation] = useState<LocationType>(
+    LocationType.LOCATION_START
+  );
+
   return (
     <GameMasterContext.Provider
-      value={{ player, setPlayer, canRender, setCanRender }}
+      value={{
+        player,
+        setPlayer,
+        canRender,
+        setCanRender,
+        playerLocation,
+        setPlayerLocation,
+      }}
     >
       {children}
     </GameMasterContext.Provider>

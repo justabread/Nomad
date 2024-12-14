@@ -5,11 +5,14 @@ import {
   MindTraitType,
   BodyTraitType,
 } from "@/Types/PlayerTypes";
-import { LocationType } from "@/Types/LocationTypes";
+import { LocationsObjectInterface, Locations } from "@/Types/LocationTypes";
+import Preparation from "@/components/Preparation/Preparation";
+import Forest from "@/components/Journey/Environments/Forest/Forest";
+import Ruins from "@/components/Journey/Environments/Ruins/Ruins";
 
 interface CanRenderInterface {
   preparation: boolean;
-  forest: boolean;
+  journey: boolean;
 }
 
 interface GameMasterContextInterface {
@@ -17,8 +20,8 @@ interface GameMasterContextInterface {
   setPlayer: Dispatch<SetStateAction<PlayerInterface>>;
   canRender: CanRenderInterface;
   setCanRender: Dispatch<SetStateAction<CanRenderInterface>>;
-  playerLocation: LocationType;
-  setPlayerLocation: Dispatch<SetStateAction<LocationType>>;
+  playerLocation: LocationsObjectInterface;
+  setPlayerLocation: Dispatch<SetStateAction<LocationsObjectInterface>>;
 }
 
 const InitialPlayerState: PlayerInterface = {
@@ -28,12 +31,27 @@ const InitialPlayerState: PlayerInterface = {
   bodyTrait: BodyTraitType.NO_BODY_TRAIT,
 };
 
+export const LocationsObject: Record<Locations, LocationsObjectInterface> = {
+  [Locations.LOCATION_START]: {
+    name: "Preparation",
+    component: Preparation,
+  },
+  [Locations.LOCATION_FOREST]: {
+    name: "Forest",
+    component: Forest,
+  },
+  [Locations.LOCATION_RUINS]: {
+    name: "Ruins",
+    component: Ruins,
+  },
+};
+
 export const GameMasterContext = createContext<GameMasterContextInterface>({
   player: InitialPlayerState,
   setPlayer: () => {},
-  canRender: { preparation: true, forest: false },
+  canRender: { preparation: true, journey: false },
   setCanRender: () => {},
-  playerLocation: LocationType.LOCATION_START,
+  playerLocation: LocationsObject[Locations.LOCATION_START],
   setPlayerLocation: () => {},
 });
 
@@ -45,12 +63,13 @@ export const GameMasterContextProvider = ({
   const [player, setPlayer] = useState<PlayerInterface>(InitialPlayerState);
   const [canRender, setCanRender] = useState<CanRenderInterface>({
     preparation: true,
-    forest: false,
+    journey: false,
   });
 
-  const [playerLocation, setPlayerLocation] = useState<LocationType>(
-    LocationType.LOCATION_START
-  );
+  const [playerLocation, setPlayerLocation] =
+    useState<LocationsObjectInterface>(
+      LocationsObject[Locations.LOCATION_START]
+    );
 
   return (
     <GameMasterContext.Provider

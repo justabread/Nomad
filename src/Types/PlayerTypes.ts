@@ -7,13 +7,13 @@ export enum WeaponType {
   RIFLE = "Rifle",
 }
 export enum MindTraitType {
-  NO_MIND_TRAIT = "NoMindTrait",
+  NO_MIND_TRAIT = "No Mind Trait",
   ANXIOUS = "Anxious",
   BRAVE = "Brave",
   SCHIZOPHRENIC = "Schizophrenic",
 }
 export enum BodyTraitType {
-  NO_BODY_TRAIT = "NoBodyTrait",
+  NO_BODY_TRAIT = "No Body Trait",
   FAT = "Fat",
   ATHLETIC = "Athletic",
   STRONG = "Strong",

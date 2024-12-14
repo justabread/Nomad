@@ -1,11 +1,16 @@
-import Forest from "@/components/Journey/Environments/Forest/Forest";
 import Preparation from "@/components/Preparation/Preparation";
-import { GameMasterContext } from "@/Contexts/GameMasterContextProvider";
+import {
+  GameMasterContext,
+  LocationsObject,
+} from "@/Contexts/GameMasterContextProvider";
 import { useContext } from "react";
 import styles from "./GameWindow.module.css";
+import LocationsSelector from "@/components/LocationsSelector/LocationsSelector";
 
 const GameWindow = () => {
-  const { player, canRender } = useContext(GameMasterContext);
+  const { player, playerLocation } = useContext(GameMasterContext);
+
+  const LocationComponent = playerLocation.component;
   return (
     <div className={styles.gameWindowContainer}>
       <div className={styles.playerStatsContainer}>
@@ -14,10 +19,10 @@ const GameWindow = () => {
         <div>Equipped Weapon: {player.weapon}</div>
         <div>Mind Trait: {player.mindTrait}</div>
         <div>Body Trait: {player.bodyTrait}</div>
+        <LocationsSelector />
       </div>
 
-      {canRender.preparation && <Preparation />}
-      {canRender.forest && <Forest />}
+      <LocationComponent />
     </div>
   );
 };

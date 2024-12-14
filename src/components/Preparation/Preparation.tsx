@@ -1,10 +1,10 @@
-import { FC, useContext, ChangeEvent, useEffect } from "react";
+import { useContext, ChangeEvent, useEffect } from "react";
 import styles from "./Preparation.module.css";
 import Select from "@/components/Select/Select";
 import { GameMasterContext } from "../../Contexts/GameMasterContextProvider";
 import { BodyTraitType, MindTraitType, WeaponType } from "@/Types/PlayerTypes";
 
-const Preparation: FC = () => {
+const Preparation = () => {
   const { player, setPlayer, canRender, setCanRender } =
     useContext(GameMasterContext);
 

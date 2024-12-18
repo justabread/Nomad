@@ -1,47 +1,46 @@
 import { createContext, Dispatch, SetStateAction, useState } from "react";
 import {
   PlayerInterface,
-  WeaponType,
-  MindTraitType,
-  BodyTraitType,
+  WeaponsEnum,
+  MindTraitsEnum,
+  BodyTraitsEnum,
 } from "@/Types/PlayerTypes";
-import { LocationsObjectInterface, Locations } from "@/Types/LocationTypes";
+import {
+  LocationsObjectInterface,
+  LocationNamesEnum,
+} from "@/Types/LocationTypes";
 import Preparation from "@/components/Preparation/Preparation";
 import Forest from "@/components/Journey/Environments/Forest/Forest";
 import Ruins from "@/components/Journey/Environments/Ruins/Ruins";
 
-interface CanRenderInterface {
-  preparation: boolean;
-  journey: boolean;
-}
-
 interface GameMasterContextInterface {
   player: PlayerInterface;
   setPlayer: Dispatch<SetStateAction<PlayerInterface>>;
-  canRender: CanRenderInterface;
-  setCanRender: Dispatch<SetStateAction<CanRenderInterface>>;
-  playerLocation: LocationsObjectInterface;
-  setPlayerLocation: Dispatch<SetStateAction<LocationsObjectInterface>>;
+  playerLocation: LocationNamesEnum;
+  setPlayerLocation: Dispatch<SetStateAction<LocationNamesEnum>>;
 }
 
 const InitialPlayerState: PlayerInterface = {
   health: 100,
-  weapon: WeaponType.UNARMED,
-  mindTrait: MindTraitType.NO_MIND_TRAIT,
-  bodyTrait: BodyTraitType.NO_BODY_TRAIT,
+  weapon: WeaponsEnum.UNARMED,
+  mindTrait: MindTraitsEnum.NO_MIND_TRAIT,
+  bodyTrait: BodyTraitsEnum.NO_BODY_TRAIT,
 };
 
-export const LocationsObject: Record<Locations, LocationsObjectInterface> = {
-  [Locations.LOCATION_START]: {
-    name: "Preparation",
+export const LocationsObject: Record<
+  LocationNamesEnum,
+  LocationsObjectInterface
+> = {
+  [LocationNamesEnum.LOCATION_START]: {
+    name: LocationNamesEnum.LOCATION_START,
     component: Preparation,
   },
-  [Locations.LOCATION_FOREST]: {
-    name: "Forest",
+  [LocationNamesEnum.LOCATION_FOREST]: {
+    name: LocationNamesEnum.LOCATION_FOREST,
     component: Forest,
   },
-  [Locations.LOCATION_RUINS]: {
-    name: "Ruins",
+  [LocationNamesEnum.LOCATION_RUINS]: {
+    name: LocationNamesEnum.LOCATION_RUINS,
     component: Ruins,
   },
 };
@@ -49,9 +48,7 @@ export const LocationsObject: Record<Locations, LocationsObjectInterface> = {
 export const GameMasterContext = createContext<GameMasterContextInterface>({
   player: InitialPlayerState,
   setPlayer: () => {},
-  canRender: { preparation: true, journey: false },
-  setCanRender: () => {},
-  playerLocation: LocationsObject[Locations.LOCATION_START],
+  playerLocation: LocationNamesEnum.LOCATION_START,
   setPlayerLocation: () => {},
 });
 
@@ -61,23 +58,16 @@ export const GameMasterContextProvider = ({
   children: React.ReactNode;
 }) => {
   const [player, setPlayer] = useState<PlayerInterface>(InitialPlayerState);
-  const [canRender, setCanRender] = useState<CanRenderInterface>({
-    preparation: true,
-    journey: false,
-  });
 
-  const [playerLocation, setPlayerLocation] =
-    useState<LocationsObjectInterface>(
-      LocationsObject[Locations.LOCATION_START]
-    );
+  const [playerLocation, setPlayerLocation] = useState<LocationNamesEnum>(
+    LocationNamesEnum.LOCATION_START
+  );
 
   return (
     <GameMasterContext.Provider
       value={{
         player,
         setPlayer,
-        canRender,
-        setCanRender,
         playerLocation,
         setPlayerLocation,
       }}

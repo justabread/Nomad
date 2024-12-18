@@ -1,33 +1,57 @@
 import { useContext, ChangeEvent, useEffect } from "react";
 import styles from "./Preparation.module.css";
 import Select from "@/components/Select/Select";
-import { GameMasterContext } from "../../Contexts/GameMasterContextProvider";
-import { BodyTraitType, MindTraitType, WeaponType } from "@/Types/PlayerTypes";
+import {
+  GameMasterContext,
+  LocationsObject,
+} from "../../Contexts/GameMasterContextProvider";
+import {
+  BodyTraitsEnum,
+  MindTraitsEnum,
+  WeaponsEnum,
+} from "@/Types/PlayerTypes";
+import useGenerateRandomElement from "../Journey/Environments/useGenerateRandomElement";
+import {
+  LocationNamesEnum,
+  LocationsObjectInterface,
+} from "@/Types/LocationTypes";
 
 const Preparation = () => {
-  const { player, setPlayer, canRender, setCanRender } =
+  const { player, setPlayer, setPlayerLocation } =
     useContext(GameMasterContext);
 
   const handleWeaponChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setPlayer((prev) => ({ ...prev, weapon: e.target.value as WeaponType }));
+    setPlayer((prev) => ({
+      ...prev,
+      weapon: e.target.value as WeaponsEnum,
+    }));
   };
 
   const handleMindChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setPlayer((prev) => ({
       ...prev,
-      mindTrait: e.target.value as MindTraitType,
+      mindTrait: e.target.value as MindTraitsEnum,
     }));
   };
 
   const handleBodyChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setPlayer((prev) => ({
       ...prev,
-      bodyTrait: e.target.value as BodyTraitType,
+      bodyTrait: e.target.value as BodyTraitsEnum,
     }));
   };
 
   const StartGame = () => {
-    setCanRender((prev) => ({ ...prev, preparation: false, forest: true }));
+    const locationsWithoutStart = Object.entries(LocationsObject).filter(
+      ([key]) => key !== LocationNamesEnum.LOCATION_START
+    );
+
+    const locationsRecord = Object.fromEntries(locationsWithoutStart) as Record<
+      LocationNamesEnum,
+      LocationsObjectInterface
+    >;
+
+    setPlayerLocation(useGenerateRandomElement(locationsRecord)[0]);
   };
 
   return (
@@ -40,10 +64,10 @@ const Preparation = () => {
             <Select
               label="Weapon to bring"
               options={[
-                { title: "Unarmed", value: WeaponType.UNARMED },
-                { title: "Knife", value: WeaponType.KNIFE },
-                { title: "Pistol", value: WeaponType.PISTOL },
-                { title: "Rifle", value: WeaponType.RIFLE },
+                { title: "Unarmed", value: WeaponsEnum.UNARMED },
+                { title: "Knife", value: WeaponsEnum.KNIFE },
+                { title: "Pistol", value: WeaponsEnum.PISTOL },
+                { title: "Rifle", value: WeaponsEnum.RIFLE },
               ]}
               onChange={handleWeaponChange}
               value={player.weapon}
@@ -53,10 +77,16 @@ const Preparation = () => {
             <Select
               label="Mind Trait"
               options={[
-                { title: "No Mind Trait", value: MindTraitType.NO_MIND_TRAIT },
-                { title: "Anxious", value: MindTraitType.ANXIOUS },
-                { title: "Brave", value: MindTraitType.BRAVE },
-                { title: "Schizophrenic", value: MindTraitType.SCHIZOPHRENIC },
+                {
+                  title: "No Mind Trait",
+                  value: MindTraitsEnum.NO_MIND_TRAIT,
+                },
+                { title: "Anxious", value: MindTraitsEnum.ANXIOUS },
+                { title: "Brave", value: MindTraitsEnum.BRAVE },
+                {
+                  title: "Schizophrenic",
+                  value: MindTraitsEnum.SCHIZOPHRENIC,
+                },
               ]}
               onChange={handleMindChange}
               value={player.mindTrait}
@@ -66,10 +96,13 @@ const Preparation = () => {
             <Select
               label="Body Trait"
               options={[
-                { title: "No Body Trait", value: BodyTraitType.NO_BODY_TRAIT },
-                { title: "Fat", value: BodyTraitType.FAT },
-                { title: "Athletic", value: BodyTraitType.ATHLETIC },
-                { title: "Strong", value: BodyTraitType.STRONG },
+                {
+                  title: "No Body Trait",
+                  value: BodyTraitsEnum.NO_BODY_TRAIT,
+                },
+                { title: "Fat", value: BodyTraitsEnum.FAT },
+                { title: "Athletic", value: BodyTraitsEnum.ATHLETIC },
+                { title: "Strong", value: BodyTraitsEnum.STRONG },
               ]}
               onChange={handleBodyChange}
               value={player.bodyTrait}

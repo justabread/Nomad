@@ -10,7 +10,7 @@ import LocationsSelector from "@/components/LocationsSelector/LocationsSelector"
 const GameWindow = () => {
   const { player, playerLocation } = useContext(GameMasterContext);
 
-  const LocationComponent = playerLocation.component;
+  const LocationComponent = LocationsObject[playerLocation].component;
   return (
     <div className={styles.gameWindowContainer}>
       <div className={styles.playerStatsContainer}>

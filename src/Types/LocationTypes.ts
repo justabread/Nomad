@@ -1,12 +1,12 @@
 import { JSX } from "react";
 
-export enum Locations {
-  LOCATION_START,
-  LOCATION_FOREST,
-  LOCATION_RUINS,
+export enum LocationNamesEnum {
+  LOCATION_START = "Preparation",
+  LOCATION_FOREST = "Forest",
+  LOCATION_RUINS = "Ruins",
 }
 
 export interface LocationsObjectInterface {
-  name: string;
+  name: LocationNamesEnum;
   component: () => JSX.Element;
 }

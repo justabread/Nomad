@@ -1,18 +1,16 @@
-import { ChangeEventHandler, Dispatch, SetStateAction } from "react";
-
-export enum WeaponType {
+export enum WeaponsEnum {
   UNARMED = "Unarmed",
   KNIFE = "Knife",
   PISTOL = "Pistol",
   RIFLE = "Rifle",
 }
-export enum MindTraitType {
+export enum MindTraitsEnum {
   NO_MIND_TRAIT = "No Mind Trait",
   ANXIOUS = "Anxious",
   BRAVE = "Brave",
   SCHIZOPHRENIC = "Schizophrenic",
 }
-export enum BodyTraitType {
+export enum BodyTraitsEnum {
   NO_BODY_TRAIT = "No Body Trait",
   FAT = "Fat",
   ATHLETIC = "Athletic",
@@ -21,9 +19,9 @@ export enum BodyTraitType {
 
 export interface PlayerInterface {
   health: number;
-  weapon: WeaponType;
-  mindTrait: MindTraitType;
-  bodyTrait: BodyTraitType;
+  weapon: WeaponsEnum;
+  mindTrait: MindTraitsEnum;
+  bodyTrait: BodyTraitsEnum;
 }
 
-export type TraitType = MindTraitType | BodyTraitType;
+export type TraitType = MindTraitsEnum | BodyTraitsEnum;

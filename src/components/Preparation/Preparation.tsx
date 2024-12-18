@@ -55,7 +55,7 @@ const Preparation = () => {
   };
 
   return (
-    <div className={styles.preparationContainer}>
+    <div className={`${styles.preparationContainer} UI-element`}>
       <h1>Welcome to Nomad</h1>
       <h2>Prepare your nomad and embark on a journey.</h2>
       <div className={styles.selectorsContainer}>

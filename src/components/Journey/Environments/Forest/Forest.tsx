@@ -44,7 +44,7 @@ const Forest = () => {
   };
 
   return (
-    <div>
+    <div className="UI-element">
       <h1>You are walking through a forest.</h1>
       <RandomEventComponent />
     </div>

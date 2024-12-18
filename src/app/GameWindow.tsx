@@ -1,4 +1,4 @@
-import Preparation from "@/components/Preparation/Preparation";
+import "@/styles/CommonStyles.css";
 import {
   GameMasterContext,
   LocationsObject,
@@ -13,7 +13,7 @@ const GameWindow = () => {
   const LocationComponent = LocationsObject[playerLocation].component;
   return (
     <div className={styles.gameWindowContainer}>
-      <div className={styles.playerStatsContainer}>
+      <div className={`${styles.playerStatsContainer} UI-element`}>
         <h2>Player Stats</h2>
         <div>Health: {player.health}</div>
         <div>Equipped Weapon: {player.weapon}</div>

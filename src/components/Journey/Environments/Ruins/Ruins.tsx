@@ -172,7 +172,7 @@ const Ruins = () => {
     setRandomEventComponent(() => useGenerateRandomElement(RuinsEvents)[1]);
   };
   return (
-    <div>
+    <div className="UI-element">
       <h1>The ruins of an unknown city lay before you.</h1>
       <RandomEventComponent />
     </div>

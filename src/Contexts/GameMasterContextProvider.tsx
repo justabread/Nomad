@@ -20,6 +20,12 @@ interface GameMasterContextInterface {
   setPlayerLocation: Dispatch<SetStateAction<LocationNamesEnum>>;
 }
 
+/**
+ * InitialPlayerState
+ *
+ * @remarks
+ * The initial state of the player
+ */
 const InitialPlayerState: PlayerInterface = {
   health: 100,
   weapon: WeaponsEnum.UNARMED,
@@ -27,6 +33,12 @@ const InitialPlayerState: PlayerInterface = {
   bodyTrait: BodyTraitsEnum.NO_BODY_TRAIT,
 };
 
+/**
+ * LocationsObject
+ *
+ * @remarks
+ * The object contains all the locations in the game
+ */
 export const LocationsObject: Record<
   LocationNamesEnum,
   LocationsObjectInterface
@@ -45,6 +57,12 @@ export const LocationsObject: Record<
   },
 };
 
+/**
+ * GameMasterContext
+ *
+ * @remarks
+ * The context contains all data child components need access to
+ */
 export const GameMasterContext = createContext<GameMasterContextInterface>({
   player: InitialPlayerState,
   setPlayer: () => {},

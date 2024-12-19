@@ -1,3 +1,5 @@
+import { LocationNamesEnum } from "./LocationTypes";
+
 export enum WeaponsEnum {
   UNARMED = "Unarmed",
   KNIFE = "Knife",
@@ -15,15 +17,6 @@ export enum BodyTraitsEnum {
   FAT = "Fat",
   ATHLETIC = "Athletic",
   STRONG = "Strong",
-}
-
-export interface PlayerInterface {
-  health: number;
-  weapon: WeaponsEnum;
-  food: number;
-  firstAidKits: number;
-  mindTrait: MindTraitsEnum;
-  bodyTrait: BodyTraitsEnum;
 }
 
 export type TraitType = MindTraitsEnum | BodyTraitsEnum;

@@ -1,11 +1,7 @@
 import { useContext, ChangeEvent, useEffect } from "react";
 import styles from "./Preparation.module.css";
 import Select from "@/components/Select/Select";
-import {
-  GameMasterContext,
-  GetLocationsWithoutUtilities,
-  LocationsObject,
-} from "../../Contexts/GameMasterContextProvider";
+import { GameMasterContext } from "../../Contexts/GameMasterContextProvider";
 import {
   BodyTraitsEnum,
   MindTraitsEnum,
@@ -16,6 +12,7 @@ import {
   LocationNamesEnum,
   LocationsObjectInterface,
 } from "@/Types/LocationTypes";
+import { GetLocationsWithoutUtilities } from "../Locations";
 
 const Preparation = () => {
   const { player, setPlayer, setPlayerLocation } =

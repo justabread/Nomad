@@ -1,19 +1,16 @@
-import {
-  GameMasterContext,
-  GetLocationsWithoutUtilities,
-  LocationsObject,
-} from "@/Contexts/GameMasterContextProvider";
+import { GameMasterContext } from "@/Contexts/GameMasterContextProvider";
 import { LocationNamesEnum } from "@/Types/LocationTypes";
 import { useContext } from "react";
+import { GetLocationsWithoutUtilities } from "../Locations";
 
 const LocationsSelector = () => {
-  const { playerLocation, setPlayerLocation } = useContext(GameMasterContext);
+  const { player, setPlayerLocation } = useContext(GameMasterContext);
 
   return (
-    playerLocation !== LocationNamesEnum.LOCATION_START && (
+    player.location !== LocationNamesEnum.LOCATION_START && (
       <div>
         <h2>Locations</h2>
-        <div>Current Location: {playerLocation}</div>
+        <div>Current Location: {player.location}</div>
         {GetLocationsWithoutUtilities().map(([key]) => {
           return (
             <button

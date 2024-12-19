@@ -1,16 +1,14 @@
 import "@/styles/CommonStyles.css";
-import {
-  GameMasterContext,
-  LocationsObject,
-} from "@/Contexts/GameMasterContextProvider";
+import { GameMasterContext } from "@/Contexts/GameMasterContextProvider";
 import { useContext } from "react";
 import styles from "./GameWindow.module.css";
 import LocationsSelector from "@/components/LocationsSelector/LocationsSelector";
+import { LocationsObject } from "@/components/Locations";
 
 const GameWindow = () => {
-  const { player, playerLocation } = useContext(GameMasterContext);
+  const { player } = useContext(GameMasterContext);
 
-  const LocationComponent = LocationsObject[playerLocation].component;
+  const LocationComponent = LocationsObject[player.location].component;
 
   return (
     <div className={styles.gameWindowContainer}>

@@ -12,7 +12,13 @@ const Death = () => {
         will disappear and there will be no more reminders of who you once were.
         Ashes to ashes, dust to dust.
       </p>
-      <button>New Nomad</button>
+      <button
+        onClick={() => {
+          window.location.reload();
+        }}
+      >
+        New Nomad
+      </button>
     </div>
   );
 };

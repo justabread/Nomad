@@ -1,7 +1,5 @@
-import {
-  GameMasterContext,
-  GetLocationsWithoutUtilities,
-} from "@/Contexts/GameMasterContextProvider";
+import { GetLocationsWithoutUtilities } from "@/components/Locations";
+import { GameMasterContext } from "@/Contexts/GameMasterContextProvider";
 import { LocationNamesEnum } from "@/Types/LocationTypes";
 import { useContext } from "react";
 

@@ -5,17 +5,9 @@ import {
   useEffect,
   useState,
 } from "react";
-import {
-  WeaponsEnum,
-  MindTraitsEnum,
-  BodyTraitsEnum,
-} from "@/Types/PlayerTypes";
-import {
-  LocationsObjectInterface,
-  LocationNamesEnum,
-} from "@/Types/LocationTypes";
+
+import { LocationNamesEnum } from "@/Types/LocationTypes";
 import { InitialPlayerState, PlayerInterface } from "@/components/Player";
-import { LocationsObject } from "@/components/Locations";
 
 interface GameMasterContextInterface {
   player: PlayerInterface;

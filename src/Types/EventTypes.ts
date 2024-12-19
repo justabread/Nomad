@@ -1,4 +1,4 @@
-export enum ForestEventKeys {
+export enum ForestEventsEnum {
   EVENT_CALM,
   EVENT_WOLF,
 }
@@ -8,10 +8,9 @@ export enum RuinsEventKeys {
   EVENT_BANDITS,
   EVENT_MALL,
   EVENT_STORE_GUNS,
-  EVENT_STORE_FOOD,
-  EVENT_STORE_CLOTHING,
+  EVENT_RESTAURANT,
   EVENT_STORE_PHARMACY,
   EVENT_DOGS,
 }
 
-export type EventTypes = ForestEventKeys | RuinsEventKeys;
+export type EventTypes = ForestEventsEnum | RuinsEventKeys;

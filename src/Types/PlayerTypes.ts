@@ -20,6 +20,8 @@ export enum BodyTraitsEnum {
 export interface PlayerInterface {
   health: number;
   weapon: WeaponsEnum;
+  food: number;
+  firstAidKits: number;
   mindTrait: MindTraitsEnum;
   bodyTrait: BodyTraitsEnum;
 }

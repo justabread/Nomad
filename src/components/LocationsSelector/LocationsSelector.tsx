@@ -1,5 +1,6 @@
 import {
   GameMasterContext,
+  GetLocationsWithoutUtilities,
   LocationsObject,
 } from "@/Contexts/GameMasterContextProvider";
 import { LocationNamesEnum } from "@/Types/LocationTypes";
@@ -8,24 +9,27 @@ import { useContext } from "react";
 const LocationsSelector = () => {
   const { playerLocation, setPlayerLocation } = useContext(GameMasterContext);
 
-  const movePlayerToLocation = (location: LocationNamesEnum) => {
-    return () => setPlayerLocation(location);
-  };
-
   return (
     playerLocation !== LocationNamesEnum.LOCATION_START && (
       <div>
         <h2>Locations</h2>
         <div>Current Location: {playerLocation}</div>
+        {GetLocationsWithoutUtilities().map(([key]) => {
+          return (
+            <button
+              key={key}
+              onClick={() => setPlayerLocation(key as LocationNamesEnum)}
+            >
+              {key}
+            </button>
+          );
+        })}
         <button
-          onClick={movePlayerToLocation(LocationNamesEnum.LOCATION_FOREST)}
+          onClick={() =>
+            setPlayerLocation(LocationNamesEnum.LOCATION_CAMP_PLAYER)
+          }
         >
-          Forest
-        </button>
-        <button
-          onClick={movePlayerToLocation(LocationNamesEnum.LOCATION_RUINS)}
-        >
-          Ruins
+          Camp
         </button>
       </div>
     )

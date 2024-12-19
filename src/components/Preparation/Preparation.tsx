@@ -3,6 +3,7 @@ import styles from "./Preparation.module.css";
 import Select from "@/components/Select/Select";
 import {
   GameMasterContext,
+  GetLocationsWithoutUtilities,
   LocationsObject,
 } from "../../Contexts/GameMasterContextProvider";
 import {
@@ -42,14 +43,9 @@ const Preparation = () => {
   };
 
   const StartGame = () => {
-    const locationsWithoutStart = Object.entries(LocationsObject).filter(
-      ([key]) => key !== LocationNamesEnum.LOCATION_START
-    );
-
-    const locationsRecord = Object.fromEntries(locationsWithoutStart) as Record<
-      LocationNamesEnum,
-      LocationsObjectInterface
-    >;
+    const locationsRecord = Object.fromEntries(
+      GetLocationsWithoutUtilities()
+    ) as Record<LocationNamesEnum, LocationsObjectInterface>;
 
     setPlayerLocation(useGenerateRandomElement(locationsRecord)[0]);
   };

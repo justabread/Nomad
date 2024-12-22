@@ -6,13 +6,13 @@ import {
   useState,
 } from "react";
 
-import { LocationNamesEnum } from "@/Types/LocationTypes";
+import { LocationsType, UtilityLocationsEnum } from "@/Types/LocationTypes";
 import { InitialPlayerState, PlayerInterface } from "@/components/Player";
 
 interface GameMasterContextInterface {
   player: PlayerInterface;
   setPlayer: Dispatch<SetStateAction<PlayerInterface>>;
-  setPlayerLocation: Function;
+  setPlayerLocation: (newLocation: LocationsType) => void;
 }
 
 /**
@@ -34,23 +34,15 @@ export const GameMasterContextProvider = ({
 }) => {
   const [player, setPlayer] = useState<PlayerInterface>(InitialPlayerState);
 
-  const SetPlayerLocation = (newLocation: LocationNamesEnum) => {
+  const SetPlayerLocation = (newLocation: LocationsType) => {
     setPlayer((prev) => ({ ...prev, location: newLocation }));
   };
 
   useEffect(() => {
     if (player.health <= 0) {
-      SetPlayerLocation(LocationNamesEnum.LOCATION_DEATH);
+      SetPlayerLocation(UtilityLocationsEnum.LOCATION_DEATH);
     }
   }, [player.health]);
-
-  // const sanitizedSetPlayerLocation = (newLocation: LocationNamesEnum) => {
-  //   if (player.health <= 0) {
-  //     setPlayerLocation(LocationNamesEnum.LOCATION_DEATH);
-  //   } else {
-  //     setPlayerLocation(newLocation);
-  //   }
-  // };
 
   return (
     <GameMasterContext.Provider

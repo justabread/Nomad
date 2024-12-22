@@ -1,7 +1,8 @@
 import { JSX, useContext, useState } from "react";
-import useGenerateRandomElement from "../useGenerateRandomElement";
+import { useGenerateRandomNumber } from "../useGenerateRandoms";
 import { ForestEventsEnum } from "@/Types/EventTypes";
 import { GameMasterContext } from "@/Contexts/GameMasterContextProvider";
+import { NameWithComponentInterface } from "@/Types/GameTypes";
 
 const Forest = () => {
   const { player } = useContext(GameMasterContext);
@@ -30,17 +31,23 @@ const Forest = () => {
     );
   };
 
-  const ForestEvents: Record<ForestEventsEnum, () => JSX.Element> = {
-    [ForestEventsEnum.EVENT_CALM]: EventCalm,
-    [ForestEventsEnum.EVENT_WOLF]: EventWolf,
-  };
+  const ForestEvents: NameWithComponentInterface<ForestEventsEnum>[] = [
+    { name: ForestEventsEnum.EVENT_CALM, component: EventCalm },
+    { name: ForestEventsEnum.EVENT_WOLF, component: EventWolf },
+  ];
 
   const [RandomEventComponent, setRandomEventComponent] = useState<
-    () => JSX.Element
-  >(() => useGenerateRandomElement(ForestEvents)[1]);
+    (props: any) => JSX.Element
+  >(
+    () =>
+      ForestEvents[useGenerateRandomNumber(ForestEvents.length - 1)].component
+  );
 
   const handleChangeEvent = () => {
-    setRandomEventComponent(() => useGenerateRandomElement(ForestEvents)[1]);
+    setRandomEventComponent(
+      () =>
+        ForestEvents[useGenerateRandomNumber(ForestEvents.length - 1)].component
+    );
   };
 
   return (

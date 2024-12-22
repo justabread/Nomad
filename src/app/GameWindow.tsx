@@ -3,8 +3,8 @@ import { GameMasterContext } from "@/Contexts/GameMasterContextProvider";
 import { useContext } from "react";
 import styles from "./GameWindow.module.css";
 import LocationsSelector from "@/components/LocationsSelector/LocationsSelector";
-import { LocationsObject } from "@/components/Locations";
 import Journey from "@/components/Journey/Journey";
+import { JourneyContextProvider } from "@/Contexts/JourneyContextProvider";
 
 const GameWindow = () => {
   const { player } = useContext(GameMasterContext);
@@ -20,7 +20,9 @@ const GameWindow = () => {
         <LocationsSelector />
       </div>
 
-      <Journey />
+      <JourneyContextProvider>
+        <Journey />
+      </JourneyContextProvider>
     </div>
   );
 };

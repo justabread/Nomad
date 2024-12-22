@@ -1,4 +1,8 @@
-import { LocationNamesEnum } from "@/Types/LocationTypes";
+import {
+  JourneyLocationsEnum,
+  LocationsType,
+  UtilityLocationsEnum,
+} from "@/Types/LocationTypes";
 import {
   BodyTraitsEnum,
   MindTraitsEnum,
@@ -18,8 +22,8 @@ export interface PlayerInterface {
   firstAidKits: number;
   mindTrait: MindTraitsEnum;
   bodyTrait: BodyTraitsEnum;
-  location: LocationNamesEnum;
-  currentFight: { location: LocationNamesEnum; enemies: EnemyInterface[] };
+  location: LocationsType;
+  currentFight: { location: JourneyLocationsEnum; enemies: EnemyInterface[] };
 }
 
 /**
@@ -35,6 +39,6 @@ export const InitialPlayerState: PlayerInterface = {
   firstAidKits: 0,
   mindTrait: MindTraitsEnum.NO_MIND_TRAIT,
   bodyTrait: BodyTraitsEnum.NO_BODY_TRAIT,
-  location: LocationNamesEnum.LOCATION_START,
-  currentFight: { location: LocationNamesEnum.LOCATION_DEATH, enemies: [] },
+  location: UtilityLocationsEnum.LOCATION_START,
+  currentFight: { location: JourneyLocationsEnum.LOCATION_FOREST, enemies: [] },
 };

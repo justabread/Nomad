@@ -1,29 +1,16 @@
 import { useContext } from "react";
-import Forest from "./Environments/Forest/Forest";
-import Ruins from "./Environments/Ruins/Ruins";
 import { GameMasterContext } from "@/Contexts/GameMasterContextProvider";
-import { EnemyInterface } from "../Player";
-import { LocationsObject } from "../Locations";
-import { LocationNamesEnum } from "@/Types/LocationTypes";
+import { GetLocationComponent } from "../Locations";
+import { JourneyLocationsEnum } from "@/Types/LocationTypes";
+
 const Journey = () => {
-  const { player, setPlayer, setPlayerLocation } =
-    useContext(GameMasterContext);
+  const { player } = useContext(GameMasterContext);
 
-  const InitiateFight = (fight: {
-    location: LocationNamesEnum;
-    enemies: EnemyInterface[];
-  }) => {
-    setPlayer((prev) => ({
-      ...prev,
-      currentFight: fight,
-    }));
-    setPlayerLocation(LocationNamesEnum.LOCATION_FIGHT);
-  };
+  const LocationComponent = GetLocationComponent(player.location).component;
 
-  const LocationComponent = LocationsObject[player.location].component;
   return (
     <div>
-      <LocationComponent InitiateFight={InitiateFight} />
+      <LocationComponent />
     </div>
   );
 };

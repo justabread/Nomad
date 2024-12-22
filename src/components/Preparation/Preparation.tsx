@@ -7,12 +7,9 @@ import {
   MindTraitsEnum,
   WeaponsEnum,
 } from "@/Types/PlayerTypes";
-import useGenerateRandomElement from "../Journey/Environments/useGenerateRandomElement";
-import {
-  LocationNamesEnum,
-  LocationsObjectInterface,
-} from "@/Types/LocationTypes";
-import { GetLocationsWithoutUtilities } from "../Locations";
+import { useGenerateRandomNumber } from "../Journey/Environments/useGenerateRandoms";
+
+import { JourneyLocationElements } from "../Locations";
 
 const Preparation = () => {
   const { player, setPlayer, setPlayerLocation } =
@@ -40,11 +37,11 @@ const Preparation = () => {
   };
 
   const StartGame = () => {
-    const locationsRecord = Object.fromEntries(
-      GetLocationsWithoutUtilities()
-    ) as Record<LocationNamesEnum, LocationsObjectInterface>;
-
-    setPlayerLocation(useGenerateRandomElement(locationsRecord)[0]);
+    setPlayerLocation(
+      JourneyLocationElements[
+        useGenerateRandomNumber(JourneyLocationElements.length - 1)
+      ].name
+    );
   };
 
   return (

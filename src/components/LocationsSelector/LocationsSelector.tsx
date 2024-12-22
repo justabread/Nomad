@@ -1,35 +1,41 @@
 import { GameMasterContext } from "@/Contexts/GameMasterContextProvider";
-import { LocationNamesEnum } from "@/Types/LocationTypes";
+import {
+  JourneyLocationsEnum,
+  UtilityLocationsEnum,
+} from "@/Types/LocationTypes";
+
 import { useContext } from "react";
-import { GetLocationsWithoutUtilities } from "../Locations";
+import { JourneyLocationElements, UtilityLocationElements } from "../Locations";
 
 const LocationsSelector = () => {
   const { player, setPlayerLocation } = useContext(GameMasterContext);
 
   return (
-    player.location !== LocationNamesEnum.LOCATION_START && (
+    player.location !== UtilityLocationsEnum.LOCATION_START && (
       <div>
         <h2>Locations</h2>
         <div>Current Location: {player.location}</div>
-        {GetLocationsWithoutUtilities().map(([key]) => {
+        {JourneyLocationElements.map((element, i) => {
           return (
             <button
-              key={key}
-              onClick={() => setPlayerLocation(key as LocationNamesEnum)}
+              key={i}
+              onClick={() =>
+                setPlayerLocation(element.name as JourneyLocationsEnum)
+              }
             >
-              {key}
+              {element.name}
             </button>
           );
         })}
         <button
           onClick={() =>
-            setPlayerLocation(LocationNamesEnum.LOCATION_CAMP_PLAYER)
+            setPlayerLocation(UtilityLocationsEnum.LOCATION_CAMP_PLAYER)
           }
         >
           Camp
         </button>
         <button
-          onClick={() => setPlayerLocation(LocationNamesEnum.LOCATION_FIGHT)}
+          onClick={() => setPlayerLocation(UtilityLocationsEnum.LOCATION_FIGHT)}
         >
           Fight
         </button>

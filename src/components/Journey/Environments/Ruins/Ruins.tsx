@@ -1,86 +1,106 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { JSX } from "react";
-import useGenerateRandomElement from "../useGenerateRandomElement";
-import useGenerateRandomNumber from "../useGenerateRandomNumber";
+import { useGenerateRandomNumber } from "../useGenerateRandoms";
 import { EnemyInterface } from "@/components/Player";
-import { LocationNamesEnum } from "@/Types/LocationTypes";
-import { RuinsEventsEnum } from "@/Types/EventTypes";
 
-const Ruins = ({
-  InitiateFight,
-}: {
-  InitiateFight: (fight: {
-    location: LocationNamesEnum;
-    enemies: EnemyInterface[];
-  }) => void;
-}) => {
-  const enum buildingConditionEnum {
+import { RuinsEventsEnum } from "@/Types/EventTypes";
+import { NameWithComponentInterface } from "@/Types/GameTypes";
+import { JourneyContext } from "@/Contexts/JourneyContextProvider";
+import { JourneyLocationsEnum } from "@/Types/LocationTypes";
+
+const Ruins = () => {
+  const { InitiateFight } = useContext(JourneyContext);
+
+  const enum BuildingConditionEnum {
     HALF_RUINED,
     FULLY_RUINED,
     BURNED_OUT,
   }
 
-  const buildingConditions = {
-    [buildingConditionEnum.HALF_RUINED]: (
-      <p>
-        The building is half-ruined, with some parts still holding up pretty
-        well.
-      </p>
-    ),
-    [buildingConditionEnum.FULLY_RUINED]: (
-      <p>The building is broken down and ruined.</p>
-    ),
-    [buildingConditionEnum.BURNED_OUT]: (
-      <p>
-        The building seems to have burned down a long time ago. Schorched walls
-        and marks of black soot are the only signs of its past.
-      </p>
-    ),
-  };
+  const buildingConditions: NameWithComponentInterface<BuildingConditionEnum>[] =
+    [
+      {
+        name: BuildingConditionEnum.HALF_RUINED,
+        component: () => (
+          <p>
+            The building is half-ruined, with some parts still holding up pretty
+            well.
+          </p>
+        ),
+      },
+      {
+        name: BuildingConditionEnum.FULLY_RUINED,
+        component: () => <p>The building is broken down and ruined.</p>,
+      },
+      {
+        name: BuildingConditionEnum.BURNED_OUT,
+        component: () => (
+          <p>
+            The building seems to have burned down a long time ago. Schorched
+            walls and marks of black soot are the only signs of its past.
+          </p>
+        ),
+      },
+    ];
 
   const EventCalm = () => {
-    const enum calmEventsEnum {
+    const enum CalmEventsEnum {
       PAST,
       SUN,
       BREEZE,
       PIGEONS,
     }
 
-    const possibleCalmEvents: Record<calmEventsEnum, JSX.Element> = {
-      [calmEventsEnum.PAST]: (
-        <p>
-          You think about what could have happened here, but the dead silence of
-          it's past inhabitants deliver no answers.
-        </p>
-      ),
-      [calmEventsEnum.SUN]: (
-        <p>
-          The sun shines brightly onto you, warming your face. For a moment, you
-          forget about everything that has happened to you and just enjoy it.
-        </p>
-      ),
-      [calmEventsEnum.BREEZE]: (
-        <p>
-          A gentle breeze rustles through the ruins, carrying the scent of
-          decay.
-        </p>
-      ),
-      [calmEventsEnum.PIGEONS]: (
-        <p>
-          A group of pigeons coo on top of a nearby building. You smile,
-          thinking how unsurprising it is that they are still around.
-        </p>
-      ),
-    };
+    const possibleCalmEvents: NameWithComponentInterface<CalmEventsEnum>[] = [
+      {
+        name: CalmEventsEnum.PAST,
+        component: () => (
+          <p>
+            You think about what could have happened here, but the dead silence
+            of it's past inhabitants deliver no answers.
+          </p>
+        ),
+      },
+      {
+        name: CalmEventsEnum.SUN,
+        component: () => (
+          <p>
+            The sun shines brightly onto you, warming your face. For a moment,
+            you forget about everything that has happened to you and just enjoy
+            it.
+          </p>
+        ),
+      },
+      {
+        name: CalmEventsEnum.BREEZE,
+        component: () => (
+          <p>
+            A gentle breeze rustles through the ruins, carrying the scent of
+            decay.
+          </p>
+        ),
+      },
+      {
+        name: CalmEventsEnum.PIGEONS,
+        component: () => (
+          <p>
+            A group of pigeons coo on top of a nearby building. You smile,
+            thinking how unsurprising it is that they are still around.
+          </p>
+        ),
+      },
+    ];
 
-    const randomCalmEvent = useGenerateRandomElement(possibleCalmEvents);
+    const RandomCalmEvent =
+      possibleCalmEvents[useGenerateRandomNumber(possibleCalmEvents.length - 1)]
+        .component;
 
     return (
       <div>
         <p>
           A strange calmness surrounds you. You feel safe, for the time being.
         </p>
-        {randomCalmEvent[1]}
+        <RandomCalmEvent />
         <button onClick={handleChangeEvent}>Continue</button>
       </div>
     );
@@ -101,7 +121,7 @@ const Ruins = ({
     }
 
     const fight = {
-      location: LocationNamesEnum.LOCATION_RUINS,
+      location: JourneyLocationsEnum.LOCATION_RUINS,
       enemies: enemies,
     };
 
@@ -123,13 +143,14 @@ const Ruins = ({
   };
 
   const EventMall = () => {
-    const randomBuildingCondition =
-      useGenerateRandomElement(buildingConditions)[1];
+    const RandomBuildingCondition =
+      buildingConditions[useGenerateRandomNumber(buildingConditions.length - 1)]
+        .component;
 
     return (
       <div>
         <h2>You enter what looks to have been some kind of a mall.</h2>
-        {randomBuildingCondition}
+        <RandomBuildingCondition />
         <p>You can look around, you will maybe find something useful.</p>
         <button onClick={handleChangeEvent}>Look Around</button>
         <button onClick={handleChangeEvent}>Leave</button>
@@ -138,13 +159,14 @@ const Ruins = ({
   };
 
   const EventStoreGuns = () => {
-    const randomBuildingCondition =
-      useGenerateRandomElement(buildingConditions)[1];
+    const RandomBuildingCondition =
+      buildingConditions[useGenerateRandomNumber(buildingConditions.length - 1)]
+        .component;
 
     return (
       <div>
         <h2>You enter a gunstore.</h2>
-        {randomBuildingCondition}
+        <RandomBuildingCondition />
         <p>
           The clerk is nowhere to be found and the inside is a mess. "Lousy
           service." - You snicker to yourself.
@@ -155,8 +177,9 @@ const Ruins = ({
   };
 
   const EventRestaurant = () => {
-    const randomBuildingCondition =
-      useGenerateRandomElement(buildingConditions)[1];
+    const RandomBuildingCondition =
+      buildingConditions[useGenerateRandomNumber(buildingConditions.length - 1)]
+        .component;
 
     return (
       <div>
@@ -164,7 +187,7 @@ const Ruins = ({
           You enter what clearly used to be a restaurant. Plates, cups and
           utensils are all over the floor and tables.
         </h2>
-        {randomBuildingCondition}
+        <RandomBuildingCondition />
         <p>You find food.</p>
         <button onClick={handleChangeEvent}>Buy</button>
       </div>
@@ -172,13 +195,14 @@ const Ruins = ({
   };
 
   const EventStorePharmacy = () => {
-    const randomBuildingCondition =
-      useGenerateRandomElement(buildingConditions)[1];
+    const RandomBuildingCondition =
+      buildingConditions[useGenerateRandomNumber(buildingConditions.length - 1)]
+        .component;
 
     return (
       <div>
         <h2>You enter what looks to have been a pharmacy.</h2>
-        {randomBuildingCondition}
+        <RandomBuildingCondition />
         <p>You can look around for medical supplies or leave.</p>
         <button>Look around</button>
         <button onClick={handleChangeEvent}>Leave</button>
@@ -194,24 +218,35 @@ const Ruins = ({
     }
 
     const dogsNumber = useGenerateRandomNumber(3, 5);
-    const possibleDogNeeds: Record<DogNeeds, JSX.Element> = {
-      [DogNeeds.FOOD]: <p>They seem hungry, but not aggressive.</p>,
-      [DogNeeds.PETS]: (
-        <p>
-          One of them walks up to you slowly and you pet them. They seem
-          friendly now.
-        </p>
-      ),
-      [DogNeeds.ANGRY]: <p>They are aggressive.</p>,
-    };
 
-    const randomDogNeed = useGenerateRandomElement(possibleDogNeeds);
+    const possibleDogNeeds: NameWithComponentInterface<DogNeeds>[] = [
+      {
+        name: DogNeeds.FOOD,
+        component: () => <p>They seem hungry, but not aggressive.</p>,
+      },
+      {
+        name: DogNeeds.PETS,
+        component: () => (
+          <p>
+            One of them walks up to you slowly and you pet them. They seem
+            friendly now.
+          </p>
+        ),
+      },
+      {
+        name: DogNeeds.ANGRY,
+        component: () => <p>They are aggressive.</p>,
+      },
+    ];
+
+    const RandomDogNeed =
+      possibleDogNeeds[useGenerateRandomNumber(possibleDogNeeds.length - 1)];
 
     return (
       <div>
         <h2>You encounter a pack of {dogsNumber} dogs.</h2>
-        {randomDogNeed[1]}
-        {randomDogNeed[0] === DogNeeds.ANGRY ? (
+        <RandomDogNeed.component />
+        {RandomDogNeed.name === DogNeeds.ANGRY ? (
           <button>Fight</button>
         ) : (
           <button onClick={handleChangeEvent}>Continue</button>
@@ -221,22 +256,48 @@ const Ruins = ({
     );
   };
 
-  const RuinsEvents: Record<RuinsEventsEnum, () => JSX.Element> = {
-    [RuinsEventsEnum.EVENT_CALM]: EventCalm,
-    [RuinsEventsEnum.EVENT_BANDITS]: EventBandits,
-    [RuinsEventsEnum.EVENT_MALL]: EventMall,
-    [RuinsEventsEnum.EVENT_STORE_GUNS]: EventStoreGuns,
-    [RuinsEventsEnum.EVENT_RESTAURANT]: EventRestaurant,
-    [RuinsEventsEnum.EVENT_STORE_PHARMACY]: EventStorePharmacy,
-    [RuinsEventsEnum.EVENT_DOGS]: EventDogs,
-  };
+  const RuinsEvents: NameWithComponentInterface<RuinsEventsEnum>[] = [
+    {
+      name: RuinsEventsEnum.EVENT_CALM,
+      component: EventCalm,
+    },
+    {
+      name: RuinsEventsEnum.EVENT_BANDITS,
+      component: EventBandits,
+    },
+    {
+      name: RuinsEventsEnum.EVENT_MALL,
+      component: EventMall,
+    },
+    {
+      name: RuinsEventsEnum.EVENT_STORE_GUNS,
+      component: EventStoreGuns,
+    },
+    {
+      name: RuinsEventsEnum.EVENT_RESTAURANT,
+      component: EventRestaurant,
+    },
+    {
+      name: RuinsEventsEnum.EVENT_STORE_PHARMACY,
+      component: EventStorePharmacy,
+    },
+    {
+      name: RuinsEventsEnum.EVENT_DOGS,
+      component: EventDogs,
+    },
+  ];
 
   const [RandomEventComponent, setRandomEventComponent] = useState<
-    () => JSX.Element
-  >(() => useGenerateRandomElement(RuinsEvents)[1]);
+    (props: any) => JSX.Element
+  >(
+    () => RuinsEvents[useGenerateRandomNumber(RuinsEvents.length - 1)].component
+  );
 
   const handleChangeEvent = () => {
-    setRandomEventComponent(() => useGenerateRandomElement(RuinsEvents)[1]);
+    setRandomEventComponent(
+      () =>
+        RuinsEvents[useGenerateRandomNumber(RuinsEvents.length - 1)].component
+    );
   };
   return (
     <div className="UI-element">

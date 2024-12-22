@@ -1,6 +1,7 @@
 import {
-  LocationNamesEnum,
-  LocationsObjectInterface,
+  JourneyLocationsEnum,
+  UtilityLocationsEnum,
+  LocationsType,
 } from "@/Types/LocationTypes";
 import Preparation from "./Preparation/Preparation";
 import PlayerCamp from "./Journey/Environments/PlayerCamp/PlayerCamp";
@@ -8,52 +9,89 @@ import Death from "./Journey/Environments/Death/Death";
 import Forest from "./Journey/Environments/Forest/Forest";
 import Ruins from "./Journey/Environments/Ruins/Ruins";
 import Fight from "./Journey/Environments/Fight/Fight";
-export const GetLocationsWithoutUtilities = () => {
-  const locationsWithoutUtilities = Object.entries(LocationsObject).filter(
-    ([key, value]) =>
-      value.utilityLocation === undefined || value.utilityLocation === false
-  );
+import { NameWithComponentInterface } from "@/Types/GameTypes";
 
-  return locationsWithoutUtilities;
+export const JourneyLocationElements: NameWithComponentInterface<JourneyLocationsEnum>[] =
+  [
+    {
+      name: JourneyLocationsEnum.LOCATION_FOREST,
+      component: Forest,
+    },
+    {
+      name: JourneyLocationsEnum.LOCATION_RUINS,
+      component: Ruins,
+    },
+  ];
+
+export const UtilityLocationElements: NameWithComponentInterface<UtilityLocationsEnum>[] =
+  [
+    {
+      name: UtilityLocationsEnum.LOCATION_START,
+      component: Preparation,
+    },
+    {
+      name: UtilityLocationsEnum.LOCATION_CAMP_PLAYER,
+      component: PlayerCamp,
+    },
+    {
+      name: UtilityLocationsEnum.LOCATION_DEATH,
+      component: Death,
+    },
+    {
+      name: UtilityLocationsEnum.LOCATION_FIGHT,
+      component: Fight,
+    },
+  ];
+
+// export const GetJourneyLocationComponent = (
+//   locationName: JourneyLocationsEnum
+// ): NameWithComponentInterface<JourneyLocationsEnum> => {
+//   const locationObject = JourneyLocationElements.find(
+//     (element) => element.name === locationName
+//   );
+
+//   if (!locationObject) {
+//     throw new Error(`Journey Location ${locationName} not found`);
+//   }
+
+//   return locationObject;
+// };
+
+// export const GetUtilityLocationComponent = (
+//   locationName: UtilityLocationsEnum
+// ): NameWithComponentInterface<UtilityLocationsEnum> => {
+//   const locationObject = UtilityLocationElements.find(
+//     (element) => element.name === locationName
+//   );
+
+//   if (!locationObject) {
+//     throw new Error(`Utility Location ${locationName} not found`);
+//   }
+
+//   return locationObject;
+// };
+
+export const GetAllLocationComponents = () => {
+  var allLocations: NameWithComponentInterface<LocationsType>[] = [];
+
+  JourneyLocationElements.map((element) => {
+    allLocations.push(element);
+  });
+  UtilityLocationElements.map((element) => {
+    allLocations.push(element);
+  });
+
+  return allLocations;
 };
 
-/**
- * LocationsObject
- *
- * @remarks
- * The object contains all the locations in the game
- */
-export const LocationsObject: Record<
-  LocationNamesEnum,
-  LocationsObjectInterface
-> = {
-  [LocationNamesEnum.LOCATION_START]: {
-    name: LocationNamesEnum.LOCATION_START,
-    component: Preparation,
-    utilityLocation: true,
-  },
-  [LocationNamesEnum.LOCATION_CAMP_PLAYER]: {
-    name: LocationNamesEnum.LOCATION_CAMP_PLAYER,
-    component: PlayerCamp,
-    utilityLocation: true,
-  },
-  [LocationNamesEnum.LOCATION_DEATH]: {
-    name: LocationNamesEnum.LOCATION_DEATH,
-    component: Death,
-    utilityLocation: true,
-  },
-  [LocationNamesEnum.LOCATION_FIGHT]: {
-    name: LocationNamesEnum.LOCATION_FIGHT,
-    component: Fight,
-    utilityLocation: true,
-  },
+export const GetLocationComponent = (locationName: LocationsType) => {
+  const locationObject = GetAllLocationComponents().find(
+    (element) => element.name === locationName
+  );
 
-  [LocationNamesEnum.LOCATION_FOREST]: {
-    name: LocationNamesEnum.LOCATION_FOREST,
-    component: Forest,
-  },
-  [LocationNamesEnum.LOCATION_RUINS]: {
-    name: LocationNamesEnum.LOCATION_RUINS,
-    component: Ruins,
-  },
+  if (!locationObject) {
+    throw new Error(`Utility Location ${locationName} not found`);
+  }
+
+  return locationObject;
 };

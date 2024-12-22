@@ -1,6 +1,7 @@
-import { GetLocationsWithoutUtilities } from "@/components/Locations";
+import { UtilityLocationElements } from "@/components/Locations";
 import { GameMasterContext } from "@/Contexts/GameMasterContextProvider";
-import { LocationNamesEnum } from "@/Types/LocationTypes";
+import { JourneyLocationsEnum } from "@/Types/LocationTypes";
+
 import { useContext } from "react";
 
 const PlayerCamp = () => {
@@ -22,16 +23,16 @@ const PlayerCamp = () => {
         </p>
       )}
       You will head tomorrow towards:
-      {GetLocationsWithoutUtilities().map(([key, value]) => {
+      {UtilityLocationElements.map((element, i) => {
         return (
           <button
             onClick={() => {
               setPlayer((prev) => ({ ...prev, health: prev.health - 25 }));
-              setPlayerLocation(key as LocationNamesEnum);
+              setPlayerLocation(element.name);
             }}
-            key={key}
+            key={i}
           >
-            {key}
+            {element.name}
           </button>
         );
       })}

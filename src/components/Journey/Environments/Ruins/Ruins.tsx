@@ -1,6 +1,9 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { JSX } from "react";
-import { useGenerateRandomNumber } from "../useGenerateRandoms";
+import {
+  useGenerateRandomElement,
+  useGenerateRandomNumber,
+} from "../useGenerateRandoms";
 import { EnemyInterface } from "@/components/Player";
 
 import { RuinsEventsEnum } from "@/Types/EventTypes";
@@ -92,8 +95,7 @@ const Ruins = () => {
     ];
 
     const RandomCalmEvent =
-      possibleCalmEvents[useGenerateRandomNumber(possibleCalmEvents.length - 1)]
-        .component;
+      useGenerateRandomElement(possibleCalmEvents).component;
 
     return (
       <div>
@@ -144,8 +146,7 @@ const Ruins = () => {
 
   const EventMall = () => {
     const RandomBuildingCondition =
-      buildingConditions[useGenerateRandomNumber(buildingConditions.length - 1)]
-        .component;
+      useGenerateRandomElement(buildingConditions).component;
 
     return (
       <div>
@@ -160,8 +161,7 @@ const Ruins = () => {
 
   const EventStoreGuns = () => {
     const RandomBuildingCondition =
-      buildingConditions[useGenerateRandomNumber(buildingConditions.length - 1)]
-        .component;
+      useGenerateRandomElement(buildingConditions).component;
 
     return (
       <div>
@@ -178,8 +178,7 @@ const Ruins = () => {
 
   const EventRestaurant = () => {
     const RandomBuildingCondition =
-      buildingConditions[useGenerateRandomNumber(buildingConditions.length - 1)]
-        .component;
+      useGenerateRandomElement(buildingConditions).component;
 
     return (
       <div>
@@ -196,8 +195,7 @@ const Ruins = () => {
 
   const EventStorePharmacy = () => {
     const RandomBuildingCondition =
-      buildingConditions[useGenerateRandomNumber(buildingConditions.length - 1)]
-        .component;
+      useGenerateRandomElement(buildingConditions).component;
 
     return (
       <div>
@@ -239,8 +237,7 @@ const Ruins = () => {
       },
     ];
 
-    const RandomDogNeed =
-      possibleDogNeeds[useGenerateRandomNumber(possibleDogNeeds.length - 1)];
+    const RandomDogNeed = useGenerateRandomElement(possibleDogNeeds);
 
     return (
       <div>
@@ -288,21 +285,18 @@ const Ruins = () => {
   ];
 
   const [RandomEventComponent, setRandomEventComponent] = useState<
-    (props: any) => JSX.Element
-  >(
-    () => RuinsEvents[useGenerateRandomNumber(RuinsEvents.length - 1)].component
-  );
+    NameWithComponentInterface<RuinsEventsEnum>
+  >(() => useGenerateRandomElement(RuinsEvents));
 
   const handleChangeEvent = () => {
-    setRandomEventComponent(
-      () =>
-        RuinsEvents[useGenerateRandomNumber(RuinsEvents.length - 1)].component
+    setRandomEventComponent(() =>
+      useGenerateRandomElement(RuinsEvents, RandomEventComponent)
     );
   };
   return (
     <div className="UI-element">
       <h1>The ruins of an unknown city lay before you.</h1>
-      <RandomEventComponent />
+      <RandomEventComponent.component />
     </div>
   );
 };

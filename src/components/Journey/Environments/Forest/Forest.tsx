@@ -1,5 +1,5 @@
 import { JSX, useContext, useState } from "react";
-import { useGenerateRandomNumber } from "../useGenerateRandoms";
+import { useGenerateRandomElement } from "../useGenerateRandoms";
 import { ForestEventsEnum } from "@/Types/EventTypes";
 import { GameMasterContext } from "@/Contexts/GameMasterContextProvider";
 import { NameWithComponentInterface } from "@/Types/GameTypes";
@@ -38,15 +38,11 @@ const Forest = () => {
 
   const [RandomEventComponent, setRandomEventComponent] = useState<
     (props: any) => JSX.Element
-  >(
-    () =>
-      ForestEvents[useGenerateRandomNumber(ForestEvents.length - 1)].component
-  );
+  >(() => useGenerateRandomElement(ForestEvents).component);
 
   const handleChangeEvent = () => {
     setRandomEventComponent(
-      () =>
-        ForestEvents[useGenerateRandomNumber(ForestEvents.length - 1)].component
+      () => useGenerateRandomElement(ForestEvents).component
     );
   };
 

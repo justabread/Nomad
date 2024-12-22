@@ -1,4 +1,7 @@
-import { UtilityLocationElements } from "@/components/Locations";
+import {
+  JourneyLocationElements,
+  UtilityLocationElements,
+} from "@/components/Locations";
 import { GameMasterContext } from "@/Contexts/GameMasterContextProvider";
 import { JourneyLocationsEnum } from "@/Types/LocationTypes";
 
@@ -23,7 +26,7 @@ const PlayerCamp = () => {
         </p>
       )}
       You will head tomorrow towards:
-      {UtilityLocationElements.map((element, i) => {
+      {JourneyLocationElements.map((element, i) => {
         return (
           <button
             onClick={() => {

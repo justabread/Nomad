@@ -7,7 +7,10 @@ import {
   MindTraitsEnum,
   WeaponsEnum,
 } from "@/Types/PlayerTypes";
-import { useGenerateRandomNumber } from "../Journey/Environments/useGenerateRandoms";
+import {
+  useGenerateRandomElement,
+  useGenerateRandomNumber,
+} from "../Journey/Environments/useGenerateRandoms";
 
 import { JourneyLocationElements } from "../Locations";
 
@@ -37,11 +40,7 @@ const Preparation = () => {
   };
 
   const StartGame = () => {
-    setPlayerLocation(
-      JourneyLocationElements[
-        useGenerateRandomNumber(JourneyLocationElements.length - 1)
-      ].name
-    );
+    setPlayerLocation(useGenerateRandomElement(JourneyLocationElements).name);
   };
 
   return (

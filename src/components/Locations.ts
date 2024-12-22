@@ -7,7 +7,7 @@ import PlayerCamp from "./Journey/Environments/PlayerCamp/PlayerCamp";
 import Death from "./Journey/Environments/Death/Death";
 import Forest from "./Journey/Environments/Forest/Forest";
 import Ruins from "./Journey/Environments/Ruins/Ruins";
-
+import Fight from "./Journey/Environments/Fight/Fight";
 export const GetLocationsWithoutUtilities = () => {
   const locationsWithoutUtilities = Object.entries(LocationsObject).filter(
     ([key, value]) =>
@@ -42,6 +42,12 @@ export const LocationsObject: Record<
     component: Death,
     utilityLocation: true,
   },
+  [LocationNamesEnum.LOCATION_FIGHT]: {
+    name: LocationNamesEnum.LOCATION_FIGHT,
+    component: Fight,
+    utilityLocation: true,
+  },
+
   [LocationNamesEnum.LOCATION_FOREST]: {
     name: LocationNamesEnum.LOCATION_FOREST,
     component: Forest,

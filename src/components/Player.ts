@@ -5,6 +5,12 @@ import {
   WeaponsEnum,
 } from "@/Types/PlayerTypes";
 
+export interface EnemyInterface {
+  name: string;
+  health: number;
+  maxDamageDealt: number;
+}
+
 export interface PlayerInterface {
   health: number;
   weapon: WeaponsEnum;
@@ -13,6 +19,7 @@ export interface PlayerInterface {
   mindTrait: MindTraitsEnum;
   bodyTrait: BodyTraitsEnum;
   location: LocationNamesEnum;
+  currentFight: { location: LocationNamesEnum; enemies: EnemyInterface[] };
 }
 
 /**
@@ -29,4 +36,5 @@ export const InitialPlayerState: PlayerInterface = {
   mindTrait: MindTraitsEnum.NO_MIND_TRAIT,
   bodyTrait: BodyTraitsEnum.NO_BODY_TRAIT,
   location: LocationNamesEnum.LOCATION_START,
+  currentFight: { location: LocationNamesEnum.LOCATION_DEATH, enemies: [] },
 };

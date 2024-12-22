@@ -1,10 +1,19 @@
-import { RuinsEventKeys } from "@/Types/EventTypes";
 import { useState } from "react";
 import { JSX } from "react";
 import useGenerateRandomElement from "../useGenerateRandomElement";
 import useGenerateRandomNumber from "../useGenerateRandomNumber";
+import { EnemyInterface } from "@/components/Player";
+import { LocationNamesEnum } from "@/Types/LocationTypes";
+import { RuinsEventsEnum } from "@/Types/EventTypes";
 
-const Ruins = () => {
+const Ruins = ({
+  InitiateFight,
+}: {
+  InitiateFight: (fight: {
+    location: LocationNamesEnum;
+    enemies: EnemyInterface[];
+  }) => void;
+}) => {
   const enum buildingConditionEnum {
     HALF_RUINED,
     FULLY_RUINED,
@@ -80,6 +89,22 @@ const Ruins = () => {
   const EventBandits = () => {
     const randomBanditsNumber = useGenerateRandomNumber(3, 5);
 
+    let enemies: EnemyInterface[] = [];
+
+    for (let i = 0; i < randomBanditsNumber; i++) {
+      const enemy: EnemyInterface = {
+        health: 50,
+        maxDamageDealt: 10,
+        name: `RandomEnemy ${i}`,
+      };
+      enemies.push(enemy);
+    }
+
+    const fight = {
+      location: LocationNamesEnum.LOCATION_RUINS,
+      enemies: enemies,
+    };
+
     return (
       <div>
         <h2>
@@ -90,7 +115,7 @@ const Ruins = () => {
           Their weapons are raised at you. You can either fight them, give them
           your food or run.
         </p>
-        <button onClick={handleChangeEvent}>Fight</button>
+        <button onClick={() => InitiateFight(fight)}>Fight</button>
         <button onClick={handleChangeEvent}>Give them your food</button>
         <button>Run</button>
       </div>
@@ -196,14 +221,14 @@ const Ruins = () => {
     );
   };
 
-  const RuinsEvents: Record<RuinsEventKeys, () => JSX.Element> = {
-    [RuinsEventKeys.EVENT_CALM]: EventCalm,
-    [RuinsEventKeys.EVENT_BANDITS]: EventBandits,
-    [RuinsEventKeys.EVENT_MALL]: EventMall,
-    [RuinsEventKeys.EVENT_STORE_GUNS]: EventStoreGuns,
-    [RuinsEventKeys.EVENT_RESTAURANT]: EventRestaurant,
-    [RuinsEventKeys.EVENT_STORE_PHARMACY]: EventStorePharmacy,
-    [RuinsEventKeys.EVENT_DOGS]: EventDogs,
+  const RuinsEvents: Record<RuinsEventsEnum, () => JSX.Element> = {
+    [RuinsEventsEnum.EVENT_CALM]: EventCalm,
+    [RuinsEventsEnum.EVENT_BANDITS]: EventBandits,
+    [RuinsEventsEnum.EVENT_MALL]: EventMall,
+    [RuinsEventsEnum.EVENT_STORE_GUNS]: EventStoreGuns,
+    [RuinsEventsEnum.EVENT_RESTAURANT]: EventRestaurant,
+    [RuinsEventsEnum.EVENT_STORE_PHARMACY]: EventStorePharmacy,
+    [RuinsEventsEnum.EVENT_DOGS]: EventDogs,
   };
 
   const [RandomEventComponent, setRandomEventComponent] = useState<

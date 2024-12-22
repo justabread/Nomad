@@ -4,11 +4,10 @@ import { useContext } from "react";
 import styles from "./GameWindow.module.css";
 import LocationsSelector from "@/components/LocationsSelector/LocationsSelector";
 import { LocationsObject } from "@/components/Locations";
+import Journey from "@/components/Journey/Journey";
 
 const GameWindow = () => {
   const { player } = useContext(GameMasterContext);
-
-  const LocationComponent = LocationsObject[player.location].component;
 
   return (
     <div className={styles.gameWindowContainer}>
@@ -21,7 +20,7 @@ const GameWindow = () => {
         <LocationsSelector />
       </div>
 
-      <LocationComponent />
+      <Journey />
     </div>
   );
 };

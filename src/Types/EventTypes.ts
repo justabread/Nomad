@@ -1,9 +1,13 @@
+export enum StartEventsEnum {
+  EVENT_NO_EVENT,
+}
+
 export enum ForestEventsEnum {
   EVENT_CALM,
   EVENT_WOLF,
 }
 
-export enum RuinsEventKeys {
+export enum RuinsEventsEnum {
   EVENT_CALM,
   EVENT_BANDITS,
   EVENT_MALL,
@@ -13,4 +17,4 @@ export enum RuinsEventKeys {
   EVENT_DOGS,
 }
 
-export type EventTypes = ForestEventsEnum | RuinsEventKeys;
+export type EventsType = StartEventsEnum | ForestEventsEnum | RuinsEventsEnum;

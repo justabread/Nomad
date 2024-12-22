@@ -1,0 +1,15 @@
+.fightElement {
+  display: flex;
+  flex-direction: row;
+  column-gap: 5px;
+
+  .eventsContainerElement {
+    display: flex;
+    flex-direction: column;
+
+    .eventsListElement {
+      height: 500px;
+      overflow-y: scroll;
+    }
+  }
+}

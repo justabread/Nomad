@@ -28,6 +28,11 @@ const LocationsSelector = () => {
         >
           Camp
         </button>
+        <button
+          onClick={() => setPlayerLocation(LocationNamesEnum.LOCATION_FIGHT)}
+        >
+          Fight
+        </button>
       </div>
     )
   );

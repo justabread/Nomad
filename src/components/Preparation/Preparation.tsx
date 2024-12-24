@@ -2,26 +2,26 @@ import { useContext, ChangeEvent, useEffect } from "react";
 import styles from "./Preparation.module.css";
 import Select from "@/components/Select/Select";
 import { GameMasterContext } from "../../Contexts/GameMasterContextProvider";
-import {
-  BodyTraitsEnum,
-  MindTraitsEnum,
-  WeaponsEnum,
-} from "@/Types/PlayerTypes";
+import { BodyTraitsEnum, MindTraitsEnum } from "@/Types/PlayerTypes";
 import {
   useGenerateRandomElement,
   useGenerateRandomNumber,
 } from "../Journey/Environments/useGenerateRandoms";
 
 import { JourneyLocationElements } from "../Locations";
+import { GetAllWeapons, GetWeaponByName } from "../Weapons";
+import { WeaponNamesEnum } from "@/Types/ItemTypes";
 
 const Preparation = () => {
   const { player, setPlayer, setPlayerLocation } =
     useContext(GameMasterContext);
 
   const handleWeaponChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    const weaponToSet = GetWeaponByName(e.target.value as WeaponNamesEnum);
+
     setPlayer((prev) => ({
       ...prev,
-      weapon: e.target.value as WeaponsEnum,
+      weapon: weaponToSet,
     }));
   };
 
@@ -52,14 +52,12 @@ const Preparation = () => {
           <div className="weaponRow">
             <Select
               label="Weapon to bring"
-              options={[
-                { title: "Unarmed", value: WeaponsEnum.UNARMED },
-                { title: "Knife", value: WeaponsEnum.KNIFE },
-                { title: "Pistol", value: WeaponsEnum.PISTOL },
-                { title: "Rifle", value: WeaponsEnum.RIFLE },
-              ]}
+              options={GetAllWeapons().map((weapon) => ({
+                title: weapon.name,
+                value: weapon.name,
+              }))}
               onChange={handleWeaponChange}
-              value={player.weapon}
+              value={player.weapon.name}
             ></Select>
           </div>
           <div className="traitMind">

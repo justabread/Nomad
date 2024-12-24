@@ -14,7 +14,7 @@ const GameWindow = () => {
       <div className={`${styles.playerStatsContainer} UI-element`}>
         <h2>Player Stats</h2>
         <div>Health: {player.health}</div>
-        <div>Equipped Weapon: {player.weapon}</div>
+        <div>Equipped Weapon: {player.weapon.name}</div>
         <div>Food: {player.food}</div>
         <div>First Aid kits: {player.firstAidKits}</div>
         <LocationsSelector />

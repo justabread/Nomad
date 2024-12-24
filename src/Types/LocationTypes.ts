@@ -11,14 +11,3 @@ export enum JourneyLocationsEnum {
 }
 
 export type LocationsType = JourneyLocationsEnum | UtilityLocationsEnum;
-
-// export interface LocationElementInterface {
-//   name: LocationNamesEnum;
-//   component: (props: {
-//     InitiateFight: (fight: {
-//       location: LocationNamesEnum;
-//       enemies: EnemyInterface[];
-//     }) => void;
-//   }) => JSX.Element;
-//   utilityLocation?: boolean;
-// }

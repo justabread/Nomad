@@ -84,7 +84,7 @@ export const GetAllLocationComponents = () => {
   return allLocations;
 };
 
-export const GetLocationComponent = (locationName: LocationsType) => {
+export const GetLocationComponentByName = (locationName: LocationsType) => {
   const locationObject = GetAllLocationComponents().find(
     (element) => element.name === locationName
   );

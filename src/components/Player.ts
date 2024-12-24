@@ -3,21 +3,15 @@ import {
   LocationsType,
   UtilityLocationsEnum,
 } from "@/Types/LocationTypes";
-import {
-  BodyTraitsEnum,
-  MindTraitsEnum,
-  WeaponsEnum,
-} from "@/Types/PlayerTypes";
+import { BodyTraitsEnum, MindTraitsEnum } from "@/Types/PlayerTypes";
 
-export interface EnemyInterface {
-  name: string;
-  health: number;
-  maxDamageDealt: number;
-}
+import { WeaponInterface, WeaponNamesEnum } from "@/Types/ItemTypes";
+import { GetWeaponByName } from "./Weapons";
+import { EnemyInterface } from "@/Types/EnemyTypes";
 
 export interface PlayerInterface {
   health: number;
-  weapon: WeaponsEnum;
+  weapon: WeaponInterface;
   food: number;
   firstAidKits: number;
   mindTrait: MindTraitsEnum;
@@ -34,7 +28,7 @@ export interface PlayerInterface {
  */
 export const InitialPlayerState: PlayerInterface = {
   health: 100,
-  weapon: WeaponsEnum.UNARMED,
+  weapon: GetWeaponByName(WeaponNamesEnum.UNARMED_FISTS),
   food: 0,
   firstAidKits: 0,
   mindTrait: MindTraitsEnum.NO_MIND_TRAIT,

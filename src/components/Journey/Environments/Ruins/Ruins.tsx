@@ -4,12 +4,13 @@ import {
   useGenerateRandomElement,
   useGenerateRandomNumber,
 } from "../useGenerateRandoms";
-import { EnemyInterface } from "@/components/Player";
 
 import { RuinsEventsEnum } from "@/Types/EventTypes";
 import { NameWithComponentInterface } from "@/Types/GameTypes";
 import { JourneyContext } from "@/Contexts/JourneyContextProvider";
 import { JourneyLocationsEnum } from "@/Types/LocationTypes";
+import { EnemyInterface } from "@/Types/EnemyTypes";
+import { BANDIT_CONSTANTS } from "@/Types/EnemyTypes";
 
 const Ruins = () => {
   const { InitiateFight } = useContext(JourneyContext);
@@ -115,9 +116,12 @@ const Ruins = () => {
 
     for (let i = 0; i < randomBanditsNumber; i++) {
       const enemy: EnemyInterface = {
-        health: 50,
-        maxDamageDealt: 10,
         name: `RandomEnemy ${i}`,
+        health:
+          Math.round(
+            useGenerateRandomNumber(BANDIT_CONSTANTS.MAX_BANDIT_HEALTH, 10) / 10
+          ) * 10,
+        maxDamage: 10,
       };
       enemies.push(enemy);
     }
@@ -286,7 +290,7 @@ const Ruins = () => {
 
   const [RandomEventComponent, setRandomEventComponent] = useState<
     NameWithComponentInterface<RuinsEventsEnum>
-  >(() => useGenerateRandomElement(RuinsEvents));
+  >(() => RuinsEvents[1]);
 
   const handleChangeEvent = () => {
     setRandomEventComponent(() =>

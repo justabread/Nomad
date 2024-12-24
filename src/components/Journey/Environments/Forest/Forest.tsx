@@ -24,7 +24,7 @@ const Forest = () => {
       <div>
         <h1>You encounter a wolf.</h1>
         <p>Your health is at {player.health} %.</p>
-        <p>Your weapon is a {player.weapon}.</p>
+        <p>Your weapon is a {player.weapon.name}.</p>
         <button onClick={handleChangeEvent}>Fight</button>
         <button>Run</button>
       </div>

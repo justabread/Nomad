@@ -10,6 +10,7 @@ import Forest from "./Journey/Environments/Forest/Forest";
 import Ruins from "./Journey/Environments/Ruins/Ruins";
 import Fight from "./Journey/Environments/Fight/Fight";
 import { NameWithComponentInterface } from "@/Types/GameTypes";
+import Looting from "./Journey/Environments/Looting/Looting";
 
 export const JourneyLocationElements: NameWithComponentInterface<JourneyLocationsEnum>[] =
   [
@@ -41,6 +42,7 @@ export const UtilityLocationElements: NameWithComponentInterface<UtilityLocation
       name: UtilityLocationsEnum.LOCATION_FIGHT,
       component: Fight,
     },
+    { name: UtilityLocationsEnum.LOCATION_LOOTING, component: Looting },
   ];
 
 // export const GetJourneyLocationComponent = (

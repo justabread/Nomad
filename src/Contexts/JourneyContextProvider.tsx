@@ -1,11 +1,22 @@
-import { EnemyInterface } from "@/components/Player";
-
-import { createContext, useContext } from "react";
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useState,
+} from "react";
 import { GameMasterContext } from "./GameMasterContextProvider";
 import {
   JourneyLocationsEnum,
   UtilityLocationsEnum,
 } from "@/Types/LocationTypes";
+import { EnemyInterface } from "@/Types/EnemyTypes";
+import { WeaponInterface, WeaponNamesEnum } from "@/Types/ItemTypes";
+import {
+  useGenerateRandomElement,
+  useGenerateRandomNumber,
+} from "@/components/Journey/Environments/useGenerateRandoms";
+import { GetAllWeapons } from "@/components/Weapons";
 
 interface JourneyContextInterface {
   InitiateFight: (fight: {
@@ -34,6 +45,10 @@ export const JourneyContextProvider = ({
       currentFight: fight,
     }));
     setPlayerLocation(UtilityLocationsEnum.LOCATION_FIGHT);
+  };
+
+  const InitiaiteLooting = () => {
+    setPlayerLocation(UtilityLocationsEnum.LOCATION_LOOTING);
   };
 
   return (

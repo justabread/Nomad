@@ -47,6 +47,8 @@ const Ruins = () => {
       },
     ];
 
+  const EventLootArea = () => {};
+
   const EventCalm = () => {
     const enum CalmEventsEnum {
       PAST,
@@ -176,6 +178,7 @@ const Ruins = () => {
           service." - You snicker to yourself.
         </p>
         <button onClick={handleChangeEvent}>Look Around</button>
+        <button onClick={handleChangeEvent}>Leave</button>
       </div>
     );
   };
@@ -192,7 +195,8 @@ const Ruins = () => {
         </h2>
         <RandomBuildingCondition />
         <p>You find food.</p>
-        <button onClick={handleChangeEvent}>Buy</button>
+        <button onClick={handleChangeEvent}>Look Around</button>
+        <button onClick={handleChangeEvent}>Leave</button>
       </div>
     );
   };

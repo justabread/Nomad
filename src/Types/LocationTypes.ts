@@ -3,6 +3,7 @@ export enum UtilityLocationsEnum {
   LOCATION_CAMP_PLAYER = "Your Camp",
   LOCATION_DEATH = "Death",
   LOCATION_FIGHT = "Fight",
+  LOCATION_LOOTING = "Looting",
 }
 
 export enum JourneyLocationsEnum {

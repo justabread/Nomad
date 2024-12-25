@@ -119,6 +119,12 @@ export const GetWeaponByName = (
   return weaponObject;
 };
 
-export const GetAllWeapons = () => {
+export const GetAllWeapons = (exclude?: WeaponNamesEnum[]) => {
+  if (exclude) {
+    return WeaponObjects.filter(
+      (weapon) =>
+        !exclude.some((weaponToExclude) => weapon.name === weaponToExclude)
+    );
+  }
   return WeaponObjects;
 };

@@ -27,8 +27,8 @@ import { NameWithComponentInterface } from "@/Types/GameTypes";
 // ) => {};
 
 export const useGenerateRandomElement = <T>(
-  elements: NameWithComponentInterface<T>[],
-  previousElement?: NameWithComponentInterface<T>
+  elements: T[],
+  previousElement?: T
 ) => {
   if (previousElement) {
     const elementsWithoutPreviousElement = elements.filter((element) => {

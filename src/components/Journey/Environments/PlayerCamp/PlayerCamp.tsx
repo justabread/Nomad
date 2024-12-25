@@ -14,7 +14,7 @@ const PlayerCamp = () => {
   return (
     <div className="UI-element">
       <h1>You have set up camp for the night.</h1>
-      {player.food < 10 ? (
+      {player.foodItems < 10 ? (
         <p>
           You do not have enough food to put anything on the campfire. As so
           many times before, you are going to starve tonight. (-25 HP)

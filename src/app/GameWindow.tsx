@@ -15,8 +15,8 @@ const GameWindow = () => {
         <h2>Player Stats</h2>
         <div>Health: {player.health}</div>
         <div>Equipped Weapon: {player.weapon.name}</div>
-        <div>Food: {player.food}</div>
-        <div>First Aid kits: {player.firstAidKits}</div>
+        <div>Food: {player.foodItems}</div>
+        <div>First Aid kits: {player.aidItems}</div>
         <LocationsSelector />
       </div>
 

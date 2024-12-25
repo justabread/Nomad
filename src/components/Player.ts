@@ -12,8 +12,8 @@ import { EnemyInterface } from "@/Types/EnemyTypes";
 export interface PlayerInterface {
   health: number;
   weapon: WeaponInterface;
-  food: number;
-  firstAidKits: number;
+  foodItems: number;
+  aidItems: number;
   mindTrait: MindTraitsEnum;
   bodyTrait: BodyTraitsEnum;
   location: LocationsType;
@@ -29,8 +29,8 @@ export interface PlayerInterface {
 export const InitialPlayerState: PlayerInterface = {
   health: 100,
   weapon: GetWeaponByName(WeaponNamesEnum.UNARMED_FISTS),
-  food: 0,
-  firstAidKits: 0,
+  foodItems: 0,
+  aidItems: 0,
   mindTrait: MindTraitsEnum.NO_MIND_TRAIT,
   bodyTrait: BodyTraitsEnum.NO_BODY_TRAIT,
   location: UtilityLocationsEnum.LOCATION_START,

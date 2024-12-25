@@ -132,7 +132,11 @@ const Fight = () => {
 
     setMarkedEnemies([]);
     setPlayerActionsPerTurn(0);
-    EnemyTurn();
+    if (FindValidEnemies(player.currentFight.enemies).length === 0) {
+      setIsFightOver(true);
+    } else {
+      EnemyTurn();
+    }
   };
 
   const AddEnemyToMarkedList = (enemyToAdd: EnemyInterface) => {

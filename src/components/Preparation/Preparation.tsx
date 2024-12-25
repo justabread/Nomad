@@ -3,10 +3,7 @@ import styles from "./Preparation.module.css";
 import Select from "@/components/Select/Select";
 import { GameMasterContext } from "../../Contexts/GameMasterContextProvider";
 import { BodyTraitsEnum, MindTraitsEnum } from "@/Types/PlayerTypes";
-import {
-  useGenerateRandomElement,
-  useGenerateRandomNumber,
-} from "../Journey/Environments/useGenerateRandoms";
+import { useGenerateRandomElement } from "../Journey/Environments/useGenerateRandoms";
 
 import { JourneyLocationElements } from "../Locations";
 import { GetAllWeapons, GetWeaponByName } from "../Weapons";

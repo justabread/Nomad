@@ -110,7 +110,7 @@ const Ruins = () => {
   };
 
   const EventBandits = () => {
-    const randomBanditsNumber = useGenerateRandomNumber(3, 5);
+    const randomBanditsNumber = useGenerateRandomNumber(5, 3);
 
     let enemies: EnemyInterface[] = [];
 
@@ -290,7 +290,7 @@ const Ruins = () => {
 
   const [RandomEventComponent, setRandomEventComponent] = useState<
     NameWithComponentInterface<RuinsEventsEnum>
-  >(() => RuinsEvents[1]);
+  >(() => useGenerateRandomElement(RuinsEvents));
 
   const handleChangeEvent = () => {
     setRandomEventComponent(() =>

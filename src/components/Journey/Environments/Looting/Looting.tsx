@@ -35,20 +35,21 @@ const Looting = ({
   const [didPlayerFindWeapon, setDidPlayerFindWeapon] = useState<boolean>(
     useGenerateRandomNumber(100) <= 15
   );
+
   return (
     <div>
       <h2>{title}</h2>
       <p>{description}</p>
-      {/**If the the location should contain food items and the player found more than 0 food items */}
-      {itemPool.newFoodItems ? (
+      {/**If the the location should contain food items and the player found more than or equal to 0 food items */}
+      {itemPool.newFoodItems !== undefined ? (
         itemPool.newFoodItems > 0 ? (
           <p>You manage to find {itemPool.newFoodItems} edible things.</p>
         ) : (
           <p>You fail to find anything edible.</p>
         )
       ) : null}
-      {/**If the the location should contain aid items and the player found more than 0 aid items */}
-      {itemPool.newAidItems ? (
+      {/**If the the location should contain aid items and the player found more than or equal to 0 aid items */}
+      {itemPool.newAidItems !== undefined ? (
         itemPool.newAidItems > 0 ? (
           <p>
             You manage to find {itemPool.newAidItems} things that could heal

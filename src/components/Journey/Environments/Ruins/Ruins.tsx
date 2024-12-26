@@ -328,7 +328,7 @@ const Ruins = () => {
 
   const [RandomEventComponent, setRandomEventComponent] = useState<
     NameWithComponentInterface<RuinsEventsEnum>
-  >(() => RuinsEvents[1]);
+  >(() => useGenerateRandomElement(RuinsEvents));
 
   const handleChangeEvent = () => {
     setRandomEventComponent(() =>

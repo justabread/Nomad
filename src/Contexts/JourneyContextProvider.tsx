@@ -15,15 +15,13 @@ import { WeaponInterface, WeaponNamesEnum } from "@/Types/ItemTypes";
 import {
   useGenerateRandomElement,
   useGenerateRandomNumber,
-} from "@/components/Journey/Environments/useGenerateRandoms";
+} from "@/components/Journey/Locations/useGenerateRandoms";
 import { GetAllWeapons } from "@/components/Weapons";
-import { LootingProps } from "@/components/Journey/Environments/Looting/Looting";
+import { LootingProps } from "@/components/Journey/Locations/Looting/Looting";
+import { FightingProps } from "@/components/Journey/Locations/Fighting/Fighting";
 
 interface JourneyContextInterface {
-  InitiateFight: (fight: {
-    location: JourneyLocationsEnum;
-    enemies: EnemyInterface[];
-  }) => void;
+  InitiateFight: (props: FightingProps) => void;
   InitiateLooting: (props: LootingProps) => void;
 }
 
@@ -37,17 +35,10 @@ export const JourneyContextProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const { setPlayer, setPlayerLocation } = useContext(GameMasterContext);
+  const { setPlayerLocation } = useContext(GameMasterContext);
 
-  const InitiateFight = (fight: {
-    location: JourneyLocationsEnum;
-    enemies: EnemyInterface[];
-  }) => {
-    setPlayer((prev) => ({
-      ...prev,
-      currentFight: fight,
-    }));
-    setPlayerLocation(UtilityLocationsEnum.LOCATION_FIGHT);
+  const InitiateFight = (props: FightingProps) => {
+    setPlayerLocation(UtilityLocationsEnum.LOCATION_FIGHT, props);
   };
 
   const InitiateLooting = (props: LootingProps) => {

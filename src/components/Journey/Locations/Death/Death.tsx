@@ -10,7 +10,6 @@ const Death = () => {
         Your flesh will feed the occasional animal, slowly giving back what you
         have taken for yourself during your life. Eventually, even your bones
         will disappear and there will be no more reminders of who you once were.
-        Ashes to ashes, dust to dust.
       </p>
       <button
         onClick={() => {

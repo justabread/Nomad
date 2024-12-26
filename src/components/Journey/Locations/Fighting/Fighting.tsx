@@ -6,10 +6,11 @@ import {
   useEffect,
   useState,
 } from "react";
-import styles from "./Fight.module.css";
+import styles from "./Fighting.module.css";
 import "@/styles/CommonStyles.css";
 import { useGenerateRandomNumber } from "../useGenerateRandoms";
 import { EnemyInterface } from "@/Types/EnemyTypes";
+import { JourneyLocationsEnum } from "@/Types/LocationTypes";
 
 interface EnemyElementProps {
   index: number;
@@ -19,6 +20,12 @@ interface EnemyElementProps {
   playerActionsPerTurn: number;
   setPlayerActionsPerTurn: Dispatch<SetStateAction<number>>;
   AddEnemyToMarkedList: (enemyToAdd: EnemyInterface) => void;
+}
+
+export interface FightingProps {
+  startEnemies: EnemyInterface[];
+  location: JourneyLocationsEnum;
+  initialEventMessage?: string;
 }
 
 const MAX_PLAYER_ACTIONS_PER_TURN = 3;
@@ -68,12 +75,20 @@ const EnemyElement = ({
   );
 };
 
-const Fight = () => {
+const Fight = ({
+  startEnemies,
+  location,
+  initialEventMessage,
+}: FightingProps) => {
   const [turn, setTurn] = useState<number>(1);
   const [playerActionsPerTurn, setPlayerActionsPerTurn] = useState<number>(0);
-  const [events, setEvents] = useState<string[]>(["The fight has started."]);
+  const [events, setEvents] = useState<string[]>(
+    initialEventMessage ? [initialEventMessage] : ["The fight has started."]
+  );
   const [isFightOver, setIsFightOver] = useState<boolean>(false);
   const [markedEnemies, setMarkedEnemies] = useState<EnemyInterface[]>([]);
+
+  const [enemies, setEnemies] = useState<EnemyInterface[]>(startEnemies);
 
   const { player, setPlayer, setPlayerLocation } =
     useContext(GameMasterContext);
@@ -83,7 +98,7 @@ const Fight = () => {
   };
 
   const EnemyTurn = () => {
-    FindValidEnemies(player.currentFight.enemies).map((enemy) => {
+    FindValidEnemies(enemies).map((enemy) => {
       const inflictedDamage = useGenerateRandomNumber(enemy.maxDamage, 0);
 
       setPlayer((prev) => ({
@@ -102,7 +117,7 @@ const Fight = () => {
   };
 
   const PlayerTurn = () => {
-    const updatedEnemies = [...player.currentFight.enemies];
+    const updatedEnemies = [...enemies];
 
     markedEnemies.forEach((markedEnemy) => {
       const enemyIndex = updatedEnemies.findIndex(
@@ -126,17 +141,11 @@ const Fight = () => {
       );
     });
 
-    setPlayer((prev) => ({
-      ...prev,
-      currentFight: {
-        ...prev.currentFight,
-        enemies: updatedEnemies,
-      },
-    }));
+    setEnemies(updatedEnemies);
 
     setMarkedEnemies([]);
     setPlayerActionsPerTurn(0);
-    if (FindValidEnemies(player.currentFight.enemies).length === 0) {
+    if (FindValidEnemies(enemies).length === 0) {
       setIsFightOver(true);
     } else {
       EnemyTurn();
@@ -148,7 +157,7 @@ const Fight = () => {
   };
 
   const EndFight = () => {
-    setPlayerLocation(player.currentFight.location);
+    setPlayerLocation(location);
     // setPlayer((prev) => ({
     //   ...prev,
     //   location: { name: prev.currentFight.location },
@@ -164,17 +173,22 @@ const Fight = () => {
       QueueEvent("You do not have any items to heal with.");
     } else {
       if (player.health > 90) {
+        const amountToHeal = 100 - player.health;
         setPlayer((prev) => ({
           ...prev,
           health: 100,
           aidItems: prev.aidItems - 1,
         }));
+
+        QueueEvent(`Player was healed for ${amountToHeal} health points.`);
       } else {
         setPlayer((prev) => ({
           ...prev,
           health: prev.health + 10,
           aidItems: prev.aidItems - 1,
         }));
+
+        QueueEvent("Player was healed for 10 health points.");
       }
     }
   };
@@ -194,7 +208,7 @@ const Fight = () => {
     <div className={styles.fightElement}>
       {!isFightOver ? (
         <div className={`UI-element`}>
-          {player.currentFight.enemies.map((enemy, i) => {
+          {enemies.map((enemy, i) => {
             return (
               <EnemyElement
                 key={i}

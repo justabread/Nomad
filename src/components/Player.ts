@@ -18,7 +18,6 @@ export interface PlayerInterface {
   mindTrait: MindTraitsEnum;
   bodyTrait: BodyTraitsEnum;
   location: { name: LocationsType; props?: any };
-  currentFight: { location: JourneyLocationsEnum; enemies: EnemyInterface[] };
 }
 
 /**
@@ -35,5 +34,4 @@ export const InitialPlayerState: PlayerInterface = {
   mindTrait: MindTraitsEnum.NO_MIND_TRAIT,
   bodyTrait: BodyTraitsEnum.NO_BODY_TRAIT,
   location: { name: UtilityLocationsEnum.LOCATION_START },
-  currentFight: { location: JourneyLocationsEnum.LOCATION_FOREST, enemies: [] },
 };

@@ -17,14 +17,12 @@ interface ItemPoolInterface {
 
 export interface LootingProps {
   title: string;
-  description: string;
   givenItemPool: ItemPoolInterface;
   locationWhereLooting: JourneyLocationsEnum;
 }
 
 const Looting = ({
   title,
-  description,
   givenItemPool,
   locationWhereLooting,
 }: LootingProps) => {
@@ -39,7 +37,7 @@ const Looting = ({
   return (
     <div>
       <h2>{title}</h2>
-      <p>{description}</p>
+      <p>After a couple hours of work you look at what you found.</p>
       {/**If the the location should contain food items and the player found more than or equal to 0 food items */}
       {itemPool.newFoodItems !== undefined ? (
         itemPool.newFoodItems > 0 ? (
@@ -60,27 +58,31 @@ const Looting = ({
         )
       ) : null}
       {/**If the the location should contain weapons and the player found a weapon */}
-      {itemPool.newWeapon && didPlayerFindWeapon && (
-        <div>
-          <p>
-            You found a {itemPool.newWeapon.name} that you could use in a fight.
-            Will you switch your current weapon to this one? Your old weapon
-            will be discarded.
-          </p>
-          <button
-            onClick={() => {
-              if (itemPool.newWeapon) {
-                setPlayer((prev) => ({
-                  ...prev,
-                  weapon: itemPool.newWeapon as WeaponInterface,
-                }));
-              }
-            }}
-          >
-            Switch Weapons
-          </button>
-        </div>
-      )}
+      {itemPool.newWeapon !== undefined ? (
+        didPlayerFindWeapon ? (
+          <div>
+            <p>
+              You found a {itemPool.newWeapon.name} that you could use in a
+              fight. Will you switch your current weapon to this one? Your old
+              weapon will be discarded.
+            </p>
+            <button
+              onClick={() => {
+                if (itemPool.newWeapon) {
+                  setPlayer((prev) => ({
+                    ...prev,
+                    weapon: itemPool.newWeapon as WeaponInterface,
+                  }));
+                }
+              }}
+            >
+              Switch Weapons
+            </button>
+          </div>
+        ) : (
+          <p>You fail to find any new weapon.</p>
+        )
+      ) : null}
       <button
         onClick={() => {
           var newPlayer = player;

@@ -4,13 +4,13 @@ import {
   LocationsType,
 } from "@/Types/LocationTypes";
 import Preparation from "./Preparation/Preparation";
-import PlayerCamp from "./Journey/Environments/PlayerCamp/PlayerCamp";
-import Death from "./Journey/Environments/Death/Death";
-import Forest from "./Journey/Environments/Forest/Forest";
-import Ruins from "./Journey/Environments/Ruins/Ruins";
-import Fight from "./Journey/Environments/Fight/Fight";
+import PlayerCamp from "./Journey/Locations/PlayerCamp/PlayerCamp";
+import Death from "./Journey/Locations/Death/Death";
+import Forest from "./Journey/Locations/Forest/Forest";
+import Ruins from "./Journey/Locations/Ruins/Ruins";
+import Fight from "./Journey/Locations/Fighting/Fighting";
 import { NameWithComponentInterface } from "@/Types/GameTypes";
-import Looting from "./Journey/Environments/Looting/Looting";
+import Looting from "./Journey/Locations/Looting/Looting";
 
 export const JourneyLocationElements =
   (): NameWithComponentInterface<JourneyLocationsEnum>[] => [

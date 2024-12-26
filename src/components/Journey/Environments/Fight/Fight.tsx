@@ -18,7 +18,6 @@ interface EnemyElementProps {
   setTurn: Dispatch<SetStateAction<number>>;
   playerActionsPerTurn: number;
   setPlayerActionsPerTurn: Dispatch<SetStateAction<number>>;
-  setEvents: Dispatch<SetStateAction<string[]>>;
   AddEnemyToMarkedList: (enemyToAdd: EnemyInterface) => void;
 }
 
@@ -45,7 +44,6 @@ const EnemyElement = ({
   turn,
   playerActionsPerTurn,
   setPlayerActionsPerTurn,
-  setEvents,
   AddEnemyToMarkedList,
 }: EnemyElementProps) => {
   const { player, setPlayer } = useContext(GameMasterContext);
@@ -77,7 +75,12 @@ const Fight = () => {
   const [isFightOver, setIsFightOver] = useState<boolean>(false);
   const [markedEnemies, setMarkedEnemies] = useState<EnemyInterface[]>([]);
 
-  const { player, setPlayer } = useContext(GameMasterContext);
+  const { player, setPlayer, setPlayerLocation } =
+    useContext(GameMasterContext);
+
+  const QueueEvent = (event: string) => {
+    setEvents((prev) => [...prev, event]);
+  };
 
   const EnemyTurn = () => {
     FindValidEnemies(player.currentFight.enemies).map((enemy) => {
@@ -87,12 +90,14 @@ const Fight = () => {
         ...prev,
         health: prev.health - inflictedDamage,
       }));
-      setEvents((prev) => [
-        ...prev,
-        inflictedDamage > 0
-          ? `Player was hit by ${enemy.name} for ${inflictedDamage} damage.`
-          : `${enemy.name} missed.`,
-      ]);
+
+      if (inflictedDamage > 0) {
+        QueueEvent(
+          `Player was hit by ${enemy.name} for ${inflictedDamage} damage.`
+        );
+      } else {
+        QueueEvent(`${enemy.name} missed.`);
+      }
     });
   };
 
@@ -116,10 +121,9 @@ const Fight = () => {
 
       updatedEnemies[enemyIndex].health -= inflictedDamage;
 
-      setEvents((prev) => [
-        ...prev,
-        `${markedEnemy.name} was hit by the Player for ${inflictedDamage} damage.`,
-      ]);
+      QueueEvent(
+        `${markedEnemy.name} was hit by the Player for ${inflictedDamage} damage.`
+      );
     });
 
     setPlayer((prev) => ({
@@ -144,7 +148,35 @@ const Fight = () => {
   };
 
   const EndFight = () => {
-    setPlayer((prev) => ({ ...prev, location: prev.currentFight.location }));
+    setPlayerLocation(player.currentFight.location);
+    // setPlayer((prev) => ({
+    //   ...prev,
+    //   location: { name: prev.currentFight.location },
+    // }));
+  };
+
+  //MAKE HEALING PART A PLAYER ACTION INSTEAD OF AN INDEPENDENT EVENT
+
+  const HealPlayer = () => {
+    if (player.health >= 100) {
+      QueueEvent("Your health is already at maximum.");
+    } else if (player.aidItems <= 0) {
+      QueueEvent("You do not have any items to heal with.");
+    } else {
+      if (player.health > 90) {
+        setPlayer((prev) => ({
+          ...prev,
+          health: 100,
+          aidItems: prev.aidItems - 1,
+        }));
+      } else {
+        setPlayer((prev) => ({
+          ...prev,
+          health: prev.health + 10,
+          aidItems: prev.aidItems - 1,
+        }));
+      }
+    }
   };
 
   // useEffect(() => {
@@ -172,7 +204,6 @@ const Fight = () => {
                 setTurn={setTurn}
                 playerActionsPerTurn={playerActionsPerTurn}
                 setPlayerActionsPerTurn={setPlayerActionsPerTurn}
-                setEvents={setEvents}
                 AddEnemyToMarkedList={AddEnemyToMarkedList}
               />
             );
@@ -217,7 +248,8 @@ const Fight = () => {
             return <div key={i}>{enemy.name}</div>;
           })}
         </div>
-        <button onClick={PlayerTurn}>Apply</button>
+        <button onClick={HealPlayer}>Heal</button>
+        <button onClick={PlayerTurn}>End Turn</button>
       </div>
     </div>
   );

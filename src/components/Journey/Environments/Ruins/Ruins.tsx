@@ -11,9 +11,11 @@ import { JourneyContext } from "@/Contexts/JourneyContextProvider";
 import { JourneyLocationsEnum } from "@/Types/LocationTypes";
 import { EnemyInterface } from "@/Types/EnemyTypes";
 import { BANDIT_CONSTANTS } from "@/Types/EnemyTypes";
+import { GetAllWeapons } from "@/components/Weapons";
+import { WeaponNamesEnum } from "@/Types/ItemTypes";
 
 const Ruins = () => {
-  const { InitiateFight } = useContext(JourneyContext);
+  const { InitiateFight, InitiateLooting } = useContext(JourneyContext);
 
   const enum BuildingConditionEnum {
     HALF_RUINED,
@@ -159,7 +161,26 @@ const Ruins = () => {
         <h2>You enter what looks to have been some kind of a mall.</h2>
         <RandomBuildingCondition />
         <p>You can look around, you will maybe find something useful.</p>
-        <button onClick={handleChangeEvent}>Look Around</button>
+        <button
+          onClick={() =>
+            InitiateLooting({
+              title:
+                "You walk around the eerie, empty halls of the once filled Mall.",
+              description:
+                "After a couple of hours of searching you check what you found.",
+              givenItemPool: {
+                newFoodItems: useGenerateRandomNumber(5),
+                newAidItems: useGenerateRandomNumber(3),
+                newWeapon: useGenerateRandomElement(
+                  GetAllWeapons([WeaponNamesEnum.UNARMED_FISTS])
+                ),
+              },
+              locationWhereLooting: JourneyLocationsEnum.LOCATION_RUINS,
+            })
+          }
+        >
+          Look Around
+        </button>
         <button onClick={handleChangeEvent}>Leave</button>
       </div>
     );
@@ -195,7 +216,20 @@ const Ruins = () => {
         </h2>
         <RandomBuildingCondition />
         <p>You find food.</p>
-        <button onClick={handleChangeEvent}>Look Around</button>
+        <button
+          onClick={() =>
+            InitiateLooting({
+              title:
+                "You start picking through the rubble inside the old restaurant.",
+              description:
+                "After a couple of hours of searching you exhaust every corner of the restaurant.",
+              givenItemPool: { newFoodItems: useGenerateRandomNumber(5) },
+              locationWhereLooting: JourneyLocationsEnum.LOCATION_RUINS,
+            })
+          }
+        >
+          Look Around
+        </button>
         <button onClick={handleChangeEvent}>Leave</button>
       </div>
     );
@@ -294,7 +328,7 @@ const Ruins = () => {
 
   const [RandomEventComponent, setRandomEventComponent] = useState<
     NameWithComponentInterface<RuinsEventsEnum>
-  >(() => useGenerateRandomElement(RuinsEvents));
+  >(() => RuinsEvents[1]);
 
   const handleChangeEvent = () => {
     setRandomEventComponent(() =>

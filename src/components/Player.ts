@@ -8,6 +8,7 @@ import { BodyTraitsEnum, MindTraitsEnum } from "@/Types/PlayerTypes";
 import { WeaponInterface, WeaponNamesEnum } from "@/Types/ItemTypes";
 import { GetWeaponByName } from "./Weapons";
 import { EnemyInterface } from "@/Types/EnemyTypes";
+import { NameWithComponentInterface } from "@/Types/GameTypes";
 
 export interface PlayerInterface {
   health: number;
@@ -16,7 +17,7 @@ export interface PlayerInterface {
   aidItems: number;
   mindTrait: MindTraitsEnum;
   bodyTrait: BodyTraitsEnum;
-  location: LocationsType;
+  location: { name: LocationsType; props?: any };
   currentFight: { location: JourneyLocationsEnum; enemies: EnemyInterface[] };
 }
 
@@ -30,9 +31,9 @@ export const InitialPlayerState: PlayerInterface = {
   health: 100,
   weapon: GetWeaponByName(WeaponNamesEnum.UNARMED_FISTS),
   foodItems: 0,
-  aidItems: 0,
+  aidItems: 5,
   mindTrait: MindTraitsEnum.NO_MIND_TRAIT,
   bodyTrait: BodyTraitsEnum.NO_BODY_TRAIT,
-  location: UtilityLocationsEnum.LOCATION_START,
+  location: { name: UtilityLocationsEnum.LOCATION_START },
   currentFight: { location: JourneyLocationsEnum.LOCATION_FOREST, enemies: [] },
 };

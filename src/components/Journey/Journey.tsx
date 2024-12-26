@@ -11,12 +11,12 @@ const Journey = () => {
   const { player } = useContext(GameMasterContext);
 
   const LocationComponent = GetLocationComponentByName(
-    player.location
+    player.location.name
   ).component;
 
   return (
     <div>
-      <LocationComponent />
+      <LocationComponent {...player.location.props} />
     </div>
   );
 };

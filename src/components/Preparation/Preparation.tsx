@@ -37,7 +37,7 @@ const Preparation = () => {
   };
 
   const StartGame = () => {
-    setPlayerLocation(useGenerateRandomElement(JourneyLocationElements).name);
+    setPlayerLocation(useGenerateRandomElement(JourneyLocationElements()).name);
   };
 
   return (

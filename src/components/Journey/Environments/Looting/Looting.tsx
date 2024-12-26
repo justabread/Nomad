@@ -7,6 +7,7 @@ import {
 import { GetAllWeapons } from "@/components/Weapons";
 import { WeaponInterface, WeaponNamesEnum } from "@/Types/ItemTypes";
 import { GameMasterContext } from "@/Contexts/GameMasterContextProvider";
+import { JourneyLocationsEnum } from "@/Types/LocationTypes";
 
 interface ItemPoolInterface {
   newFoodItems?: number;
@@ -14,20 +15,21 @@ interface ItemPoolInterface {
   newWeapon?: WeaponInterface;
 }
 
-interface LootingProps {
+export interface LootingProps {
   title: string;
   description: string;
   givenItemPool: ItemPoolInterface;
-  handleChangeEvent: () => void;
+  locationWhereLooting: JourneyLocationsEnum;
 }
 
 const Looting = ({
   title,
   description,
   givenItemPool,
-  handleChangeEvent,
+  locationWhereLooting,
 }: LootingProps) => {
-  const { player, setPlayer } = useContext(GameMasterContext);
+  const { player, setPlayer, setPlayerLocation } =
+    useContext(GameMasterContext);
 
   const [itemPool, setItemPool] = useState<ItemPoolInterface>(givenItemPool);
   const [didPlayerFindWeapon, setDidPlayerFindWeapon] = useState<boolean>(
@@ -49,7 +51,7 @@ const Looting = ({
       {itemPool.newAidItems ? (
         itemPool.newAidItems > 0 ? (
           <p>
-            You manage to find {itemPool.newFoodItems} things that could heal
+            You manage to find {itemPool.newAidItems} things that could heal
             your wounds in a tight spot.
           </p>
         ) : (
@@ -83,16 +85,15 @@ const Looting = ({
           var newPlayer = player;
 
           if (itemPool.newAidItems) {
-            newPlayer.aidItems = itemPool.newAidItems;
+            newPlayer.aidItems += itemPool.newAidItems;
           }
 
           if (itemPool.newFoodItems) {
-            newPlayer.foodItems = itemPool.newFoodItems;
+            newPlayer.foodItems += itemPool.newFoodItems;
           }
 
           setPlayer(newPlayer);
-
-          handleChangeEvent();
+          setPlayerLocation(locationWhereLooting);
         }}
       >
         Continue

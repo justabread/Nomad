@@ -11,11 +11,11 @@ const LocationsSelector = () => {
   const { player, setPlayerLocation } = useContext(GameMasterContext);
 
   return (
-    player.location !== UtilityLocationsEnum.LOCATION_START && (
+    player.location.name !== UtilityLocationsEnum.LOCATION_START && (
       <div>
         <h2>Locations</h2>
-        <div>Current Location: {player.location}</div>
-        {JourneyLocationElements.map((element, i) => {
+        <div>Current Location: {player.location.name}</div>
+        {JourneyLocationElements().map((element, i) => {
           return (
             <button
               key={i}

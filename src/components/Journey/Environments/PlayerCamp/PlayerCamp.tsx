@@ -26,7 +26,7 @@ const PlayerCamp = () => {
         </p>
       )}
       You will head tomorrow towards:
-      {JourneyLocationElements.map((element, i) => {
+      {JourneyLocationElements().map((element, i) => {
         return (
           <button
             onClick={() => {

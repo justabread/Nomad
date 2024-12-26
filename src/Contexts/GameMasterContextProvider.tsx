@@ -12,7 +12,7 @@ import { InitialPlayerState, PlayerInterface } from "@/components/Player";
 interface GameMasterContextInterface {
   player: PlayerInterface;
   setPlayer: Dispatch<SetStateAction<PlayerInterface>>;
-  setPlayerLocation: (newLocation: LocationsType) => void;
+  setPlayerLocation: (newLocation: LocationsType, props?: any) => void;
 }
 
 /**
@@ -34,8 +34,11 @@ export const GameMasterContextProvider = ({
 }) => {
   const [player, setPlayer] = useState<PlayerInterface>(InitialPlayerState);
 
-  const SetPlayerLocation = (newLocation: LocationsType) => {
-    setPlayer((prev) => ({ ...prev, location: newLocation }));
+  const SetPlayerLocation = (newLocationName: LocationsType, props?: any) => {
+    setPlayer((prev) => ({
+      ...prev,
+      location: { name: newLocationName, props: props },
+    }));
   };
 
   useEffect(() => {

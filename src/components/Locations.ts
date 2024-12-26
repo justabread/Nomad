@@ -12,8 +12,8 @@ import Fight from "./Journey/Environments/Fight/Fight";
 import { NameWithComponentInterface } from "@/Types/GameTypes";
 import Looting from "./Journey/Environments/Looting/Looting";
 
-export const JourneyLocationElements: NameWithComponentInterface<JourneyLocationsEnum>[] =
-  [
+export const JourneyLocationElements =
+  (): NameWithComponentInterface<JourneyLocationsEnum>[] => [
     {
       name: JourneyLocationsEnum.LOCATION_FOREST,
       component: Forest,
@@ -24,8 +24,8 @@ export const JourneyLocationElements: NameWithComponentInterface<JourneyLocation
     },
   ];
 
-export const UtilityLocationElements: NameWithComponentInterface<UtilityLocationsEnum>[] =
-  [
+export const UtilityLocationElements =
+  (): NameWithComponentInterface<UtilityLocationsEnum>[] => [
     {
       name: UtilityLocationsEnum.LOCATION_START,
       component: Preparation,
@@ -74,16 +74,7 @@ export const UtilityLocationElements: NameWithComponentInterface<UtilityLocation
 // };
 
 export const GetAllLocationComponents = () => {
-  var allLocations: NameWithComponentInterface<LocationsType>[] = [];
-
-  JourneyLocationElements.map((element) => {
-    allLocations.push(element);
-  });
-  UtilityLocationElements.map((element) => {
-    allLocations.push(element);
-  });
-
-  return allLocations;
+  return [...JourneyLocationElements(), ...UtilityLocationElements()];
 };
 
 export const GetLocationComponentByName = (locationName: LocationsType) => {
@@ -92,7 +83,7 @@ export const GetLocationComponentByName = (locationName: LocationsType) => {
   );
 
   if (!locationObject) {
-    throw new Error(`Utility Location ${locationName} not found`);
+    throw new Error(`Location ${locationName} not found`);
   }
 
   return locationObject;

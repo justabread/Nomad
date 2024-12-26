@@ -17,16 +17,19 @@ import {
   useGenerateRandomNumber,
 } from "@/components/Journey/Environments/useGenerateRandoms";
 import { GetAllWeapons } from "@/components/Weapons";
+import { LootingProps } from "@/components/Journey/Environments/Looting/Looting";
 
 interface JourneyContextInterface {
   InitiateFight: (fight: {
     location: JourneyLocationsEnum;
     enemies: EnemyInterface[];
   }) => void;
+  InitiateLooting: (props: LootingProps) => void;
 }
 
 export const JourneyContext = createContext<JourneyContextInterface>({
   InitiateFight: () => {},
+  InitiateLooting: () => {},
 });
 
 export const JourneyContextProvider = ({
@@ -47,14 +50,15 @@ export const JourneyContextProvider = ({
     setPlayerLocation(UtilityLocationsEnum.LOCATION_FIGHT);
   };
 
-  const InitiaiteLooting = () => {
-    setPlayerLocation(UtilityLocationsEnum.LOCATION_LOOTING);
+  const InitiateLooting = (props: LootingProps) => {
+    setPlayerLocation(UtilityLocationsEnum.LOCATION_LOOTING, props);
   };
 
   return (
     <JourneyContext.Provider
       value={{
         InitiateFight: InitiateFight,
+        InitiateLooting: InitiateLooting,
       }}
     >
       {children}

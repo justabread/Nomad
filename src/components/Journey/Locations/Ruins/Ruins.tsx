@@ -14,6 +14,8 @@ import { BANDIT_CONSTANTS } from "@/Types/EnemyTypes";
 import { GetAllWeapons } from "@/components/Weapons";
 import { WeaponNamesEnum } from "@/Types/ItemTypes";
 import { GameMasterContext } from "@/Contexts/GameMasterContextProvider";
+import { GetItemPool } from "@/components/ItemPools";
+import { Shuffle } from "@/utils/Utils";
 
 const Ruins = () => {
   const { InitiateFight, InitiateLooting } = useContext(JourneyContext);
@@ -133,6 +135,7 @@ const Ruins = () => {
   };
 
   const EventBandits = () => {
+    const { player, setPlayer } = useContext(GameMasterContext)
     const randomBanditsNumber = useGenerateRandomNumber(5, 3);
 
     const enemies: EnemyInterface[] = Array.from(
@@ -164,8 +167,25 @@ const Ruins = () => {
         >
           Fight
         </button>
-        <button onClick={handleChangeEvent}>Give them your food</button>
-        <button>Run</button>
+        <button onClick={() => {
+          if (player.foodItems > 0) {
+            setPlayer((prev) => ({
+              ...prev,
+              foodItems: 0
+            }));
+            handleChangeEvent()
+          } else {
+            InitiateFight({
+              startEnemies: enemies,
+              location: JourneyLocationsEnum.LOCATION_RUINS,
+              initialEventMessage:
+                "You failed to find anything edible in your backpack. The bandits did not take this well.",
+            });
+          }
+        }}>Give them your food</button>
+        <button onClick={() => {
+          RunAway(enemies, BANDIT_CONSTANTS.CHANCE_TO_RUN_FROM);
+        }}>Run</button>
       </div>
     );
   };
@@ -184,13 +204,7 @@ const Ruins = () => {
             InitiateLooting({
               title:
                 "You walk around the eerie, empty halls of the Mall. You search through storefronts and shops.",
-              givenItemPool: {
-                newFoodItems: useGenerateRandomNumber(5),
-                newAidItems: useGenerateRandomNumber(3),
-                newWeapon: useGenerateRandomElement(
-                  GetAllWeapons([WeaponNamesEnum.UNARMED_FISTS])
-                ),
-              },
+              givenItemPool: GetItemPool(RuinsEventsEnum.EVENT_MALL),
               locationWhereLooting: JourneyLocationsEnum.LOCATION_RUINS,
             })
           }
@@ -219,11 +233,7 @@ const Ruins = () => {
             InitiateLooting({
               title:
                 "You search through the gunstore, looking for anything you might be able to use.",
-              givenItemPool: {
-                newWeapon: useGenerateRandomElement(
-                  GetAllWeapons([WeaponNamesEnum.UNARMED_FISTS])
-                ),
-              },
+              givenItemPool: GetItemPool(RuinsEventsEnum.EVENT_STORE_GUNS),
               locationWhereLooting: JourneyLocationsEnum.LOCATION_RUINS,
             });
           }}
@@ -251,7 +261,7 @@ const Ruins = () => {
             InitiateLooting({
               title:
                 "You start picking through the rubble inside the old restaurant.",
-              givenItemPool: { newFoodItems: useGenerateRandomNumber(5) },
+              givenItemPool: GetItemPool(RuinsEventsEnum.EVENT_RESTAURANT),
               locationWhereLooting: JourneyLocationsEnum.LOCATION_RUINS,
             })
           }
@@ -277,7 +287,7 @@ const Ruins = () => {
             InitiateLooting({
               title:
                 "You rip through every box that you can find in the pharmacy.",
-              givenItemPool: { newAidItems: useGenerateRandomNumber(5) },
+              givenItemPool: GetItemPool(RuinsEventsEnum.EVENT_STORE_PHARMACY),
               locationWhereLooting: JourneyLocationsEnum.LOCATION_RUINS,
             });
           }}
@@ -400,7 +410,15 @@ const Ruins = () => {
     );
   };
 
-  const RuinsEvents = (): NameWithComponentInterface<RuinsEventsEnum>[] => [
+  const EventFinished = () => {
+    return (
+      <div>
+        <h2>You have exhausted your options here. It is time to move on.</h2>
+      </div>
+    )
+  }
+
+  const RuinsEvents: NameWithComponentInterface<RuinsEventsEnum>[] = [
     {
       name: RuinsEventsEnum.EVENT_CALM,
       component: EventCalm,
@@ -428,22 +446,37 @@ const Ruins = () => {
     {
       name: RuinsEventsEnum.EVENT_DOGS,
       component: EventDogs,
-    },
+    }
   ];
 
-  const [RandomEventComponent, setRandomEventComponent] = useState<
+
+  const [eventList, setEventList] = useState<NameWithComponentInterface<RuinsEventsEnum>[]>(() => {
+    return Shuffle<NameWithComponentInterface<RuinsEventsEnum>>(RuinsEvents).slice(useGenerateRandomNumber(3, 1))
+  });
+
+  const [eventId, setEventId] = useState<number>(eventList.length - 1);
+
+  const [EventComponent, setEventComponent] = useState<
     NameWithComponentInterface<RuinsEventsEnum>
-  >(() => useGenerateRandomElement(RuinsEvents()));
+  >(eventList[eventId]);
+
+  useEffect(() => {
+    if (eventId > 0) {
+      setEventComponent(eventList[eventId]);
+      console.log(eventId);
+    } else {
+      setEventComponent({ name: RuinsEventsEnum.EVENT_FINISHED, component: EventFinished })
+    }
+  }, [eventId])
 
   const handleChangeEvent = () => {
-    setRandomEventComponent(() =>
-      useGenerateRandomElement(RuinsEvents(), RandomEventComponent)
-    );
+    setEventId(prevId => prevId - 1);
   };
+
   return (
     <div className="UI-element">
       <h1>The ruins of an unknown city lay before you.</h1>
-      <RandomEventComponent.component />
+      <EventComponent.component />
     </div>
   );
 };

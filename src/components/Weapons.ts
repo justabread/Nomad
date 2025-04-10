@@ -81,7 +81,7 @@ const WeaponObjects: WeaponInterface[] = [
     category: WeaponsCategoriesEnum.SHOTGUN,
     minDamage: 12,
     maxDamage: 20,
-    actionPoints: 1,
+    actionPoints: 2,
     description:
       "A shotgun with two barrels. You get a strange feeling holding it, like you want to rip and tear.",
   },
@@ -90,7 +90,7 @@ const WeaponObjects: WeaponInterface[] = [
     category: WeaponsCategoriesEnum.SHOTGUN,
     minDamage: 12,
     maxDamage: 18,
-    actionPoints: 2,
+    actionPoints: 3,
     description:
       "A shotgun with a pump under the barrel for faster chambering. Much better than loading them manually.",
   },
@@ -99,7 +99,7 @@ const WeaponObjects: WeaponInterface[] = [
     category: WeaponsCategoriesEnum.SHOTGUN,
     minDamage: 12,
     maxDamage: 15,
-    actionPoints: 3,
+    actionPoints: 5,
     description:
       "A shotgun that can load shells on it's own. Until it jams of course.",
   },

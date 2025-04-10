@@ -15,6 +15,7 @@ export enum RuinsEventsEnum {
   EVENT_RESTAURANT,
   EVENT_STORE_PHARMACY,
   EVENT_DOGS,
+  EVENT_FINISHED
 }
 
 export type EventsType = StartEventsEnum | ForestEventsEnum | RuinsEventsEnum;

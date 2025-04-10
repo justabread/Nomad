@@ -5,15 +5,9 @@ import {
   useGenerateRandomNumber,
 } from "../useGenerateRandoms";
 import { GetAllWeapons } from "@/components/Weapons";
-import { WeaponInterface, WeaponNamesEnum } from "@/Types/ItemTypes";
+import { ItemPoolInterface, WeaponInterface, WeaponNamesEnum } from "@/Types/ItemTypes";
 import { GameMasterContext } from "@/Contexts/GameMasterContextProvider";
 import { JourneyLocationsEnum } from "@/Types/LocationTypes";
-
-interface ItemPoolInterface {
-  newFoodItems?: number;
-  newAidItems?: number;
-  newWeapon?: WeaponInterface;
-}
 
 export interface LootingProps {
   title: string;
@@ -35,7 +29,7 @@ const Looting = ({
   );
 
   return (
-    <div>
+    <div className="UI-element">
       <h2>{title}</h2>
       <p>After a couple hours of work you look at what you found.</p>
       {/**If the the location should contain food items and the player found more than or equal to 0 food items */}

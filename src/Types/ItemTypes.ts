@@ -1,3 +1,5 @@
+import { EventsType } from "./EventTypes";
+
 export enum WeaponsCategoriesEnum {
   UNARMED = "Unarmed",
   KNIFE = "Knife",
@@ -27,4 +29,11 @@ export interface WeaponInterface {
   actionPoints: number;
   category: WeaponsCategoriesEnum;
   description: string;
+}
+
+export interface ItemPoolInterface {
+  name: EventsType;
+  newFoodItems?: number;
+  newAidItems?: number;
+  newWeapon?: WeaponInterface
 }

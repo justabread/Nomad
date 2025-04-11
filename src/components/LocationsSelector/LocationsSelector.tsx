@@ -5,7 +5,7 @@ import {
 } from "@/Types/LocationTypes";
 
 import { useContext } from "react";
-import { JourneyLocationElements, UtilityLocationElements } from "../Locations";
+import { JourneyLocationElements } from "../Locations";
 
 const LocationsSelector = () => {
   const { player, setPlayerLocation } = useContext(GameMasterContext);

@@ -1,11 +1,7 @@
 import { JourneyContext } from "@/Contexts/JourneyContextProvider";
-import { useContext, useState } from "react";
-import {
-  useGenerateRandomElement,
-  useGenerateRandomNumber,
-} from "../useGenerateRandoms";
-import { GetAllWeapons } from "@/components/Weapons";
-import { ItemPoolInterface, WeaponInterface, WeaponNamesEnum } from "@/Types/ItemTypes";
+import { useContext } from "react";
+import { generateRandomNumber } from "../useGenerateRandoms";
+import { ItemPoolInterface, WeaponInterface } from "@/Types/ItemTypes";
 import { GameMasterContext } from "@/Contexts/GameMasterContextProvider";
 import { JourneyLocationsEnum } from "@/Types/LocationTypes";
 
@@ -23,10 +19,10 @@ const Looting = ({
   const { player, setPlayer, setPlayerLocation } =
     useContext(GameMasterContext);
 
-  const [itemPool, setItemPool] = useState<ItemPoolInterface>(givenItemPool);
-  const [didPlayerFindWeapon, setDidPlayerFindWeapon] = useState<boolean>(
-    useGenerateRandomNumber(100) <= 15
-  );
+  const { handleChangeEvent } = useContext(JourneyContext);
+
+  const itemPool: ItemPoolInterface = givenItemPool;
+  const didPlayerFindWeapon: boolean = generateRandomNumber(100) <= 15;
 
   return (
     <div className="UI-element">
@@ -79,7 +75,7 @@ const Looting = ({
       ) : null}
       <button
         onClick={() => {
-          var newPlayer = player;
+          const newPlayer = player;
 
           if (itemPool.newAidItems) {
             newPlayer.aidItems += itemPool.newAidItems;
@@ -90,6 +86,7 @@ const Looting = ({
           }
 
           setPlayer(newPlayer);
+          handleChangeEvent();
           setPlayerLocation(locationWhereLooting);
         }}
       >

@@ -11,8 +11,6 @@
 //   const randomElementIndex = Math.floor(Math.random() * keys.length);
 //   const selectedKey = keys[randomElementIndex];
 
-import { NameWithComponentInterface } from "@/Types/GameTypes";
-
 //   return [selectedKey, Elements[selectedKey]];
 // };
 
@@ -26,7 +24,7 @@ import { NameWithComponentInterface } from "@/Types/GameTypes";
 //   events: Record<, (props: any) => JSX.Element>
 // ) => {};
 
-export const useGenerateRandomElement = <T>(
+export const generateRandomElement = <T>(
   elements: T[],
   previousElement?: T
 ) => {
@@ -36,13 +34,13 @@ export const useGenerateRandomElement = <T>(
     });
 
     return elementsWithoutPreviousElement[
-      useGenerateRandomNumber(elementsWithoutPreviousElement.length - 1)
+      generateRandomNumber(elementsWithoutPreviousElement.length - 1)
     ];
   } else {
-    return elements[useGenerateRandomNumber(elements.length - 1)];
+    return elements[generateRandomNumber(elements.length - 1)];
   }
 };
 
-export const useGenerateRandomNumber = (max: number, min: number = 0) => {
+export const generateRandomNumber = (max: number, min: number = 0) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };

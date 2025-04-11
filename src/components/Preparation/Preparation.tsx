@@ -3,7 +3,7 @@ import styles from "./Preparation.module.css";
 import Select from "@/components/Select/Select";
 import { GameMasterContext } from "../../Contexts/GameMasterContextProvider";
 import { BodyTraitsEnum, MindTraitsEnum } from "@/Types/PlayerTypes";
-import { useGenerateRandomElement } from "../Journey/Locations/useGenerateRandoms";
+import { generateRandomElement } from "../Journey/Locations/useGenerateRandoms";
 
 import { JourneyLocationElements } from "../Locations";
 import { GetAllWeapons, GetWeaponByName } from "../Weapons";
@@ -37,7 +37,7 @@ const Preparation = () => {
   };
 
   const StartGame = () => {
-    setPlayerLocation(useGenerateRandomElement(JourneyLocationElements()).name);
+    setPlayerLocation(generateRandomElement(JourneyLocationElements()).name);
   };
 
   return (

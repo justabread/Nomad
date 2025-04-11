@@ -1,16 +1,11 @@
 import { GameMasterContext } from "@/Contexts/GameMasterContextProvider";
-import {
-  Dispatch,
-  SetStateAction,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { Dispatch, SetStateAction, useContext, useState } from "react";
 import styles from "./Fighting.module.css";
 import "@/styles/CommonStyles.css";
-import { useGenerateRandomNumber } from "../useGenerateRandoms";
+import { generateRandomNumber } from "../useGenerateRandoms";
 import { EnemyInterface } from "@/Types/EnemyTypes";
 import { JourneyLocationsEnum } from "@/Types/LocationTypes";
+import { JourneyContext } from "@/Contexts/JourneyContextProvider";
 
 interface EnemyElementProps {
   index: number;
@@ -28,32 +23,18 @@ export interface FightingProps {
   initialEventMessage?: string;
 }
 
-const MAX_PLAYER_ACTIONS_PER_TURN = 3;
-
 const FindValidEnemies = (enemies: EnemyInterface[]) => {
-  var validEnemies: EnemyInterface[] = [];
-
-  enemies.map((enemy) => {
-    if (enemy.health > 0) {
-      validEnemies.push(enemy);
-    }
-  });
-
+  const validEnemies = enemies.filter((enemy) => enemy.health > 0);
   return validEnemies;
 };
 
-/////////FINISH FIGHT FUNCTIONALITY
-///Continue implementing the mark enemy functionality and the turn based attack system
-
 const EnemyElement = ({
-  index,
   enemy,
-  turn,
   playerActionsPerTurn,
   setPlayerActionsPerTurn,
   AddEnemyToMarkedList,
 }: EnemyElementProps) => {
-  const { player, setPlayer } = useContext(GameMasterContext);
+  const { player } = useContext(GameMasterContext);
   const { name, health } = enemy;
 
   const isDead: boolean = health <= 0;
@@ -93,13 +74,15 @@ const Fight = ({
   const { player, setPlayer, setPlayerLocation } =
     useContext(GameMasterContext);
 
+  const { handleChangeEvent } = useContext(JourneyContext);
+
   const QueueEvent = (event: string) => {
     setEvents((prev) => [...prev, event]);
   };
 
   const EnemyTurn = () => {
     FindValidEnemies(enemies).map((enemy) => {
-      const inflictedDamage = useGenerateRandomNumber(enemy.maxDamage, 0);
+      const inflictedDamage = generateRandomNumber(enemy.maxDamage, 0);
 
       setPlayer((prev) => ({
         ...prev,
@@ -129,7 +112,7 @@ const Fight = ({
         );
       }
 
-      const inflictedDamage = useGenerateRandomNumber(
+      const inflictedDamage = generateRandomNumber(
         player.weapon.maxDamage,
         player.weapon.minDamage
       );
@@ -157,6 +140,7 @@ const Fight = ({
   };
 
   const EndFight = () => {
+    handleChangeEvent();
     setPlayerLocation(location);
     // setPlayer((prev) => ({
     //   ...prev,

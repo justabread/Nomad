@@ -1,20 +1,29 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { GameMasterContext } from "./GameMasterContextProvider";
 import { UtilityLocationsEnum } from "@/Types/LocationTypes";
 
 import { LootingProps } from "@/components/Journey/Locations/Looting/Looting";
 import { FightingProps } from "@/components/Journey/Locations/Fighting/Fighting";
 import { NameWithComponentInterface } from "@/Types/GameTypes";
-import { RuinsEventsEnum } from "@/Types/EventTypes";
+import { EventsType, RuinsEventsEnum } from "@/Types/EventTypes";
 import { Shuffle } from "@/utils/Utils";
 import { generateRandomNumber } from "@/components/Journey/Locations/useGenerateRandoms";
-import { RuinsEvents } from "@/components/Journey/Locations/Ruins/RuinsEvents";
 
 interface JourneyContextInterface {
   InitiateFight: (props: FightingProps) => void;
   InitiateLooting: (props: LootingProps) => void;
-  EventComponent: NameWithComponentInterface<RuinsEventsEnum>;
+  EventComponent: NameWithComponentInterface<EventsType>;
   handleChangeEvent: () => void;
+  setAllEvents: Dispatch<
+    SetStateAction<NameWithComponentInterface<EventsType>[]>
+  >;
 }
 
 export const JourneyContext = createContext<JourneyContextInterface>({
@@ -27,6 +36,7 @@ export const JourneyContext = createContext<JourneyContextInterface>({
     },
   },
   handleChangeEvent: () => {},
+  setAllEvents: () => {},
 });
 
 export const JourneyContextProvider = ({
@@ -34,19 +44,28 @@ export const JourneyContextProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
+  const [allEvents, setAllEvents] = useState<
+    NameWithComponentInterface<EventsType>[]
+  >([]);
+
   const GenerateEventList = () => {
-    return Shuffle<NameWithComponentInterface<RuinsEventsEnum>>(
-      RuinsEvents
-    ).slice(generateRandomNumber(3, 1));
+    return Shuffle<NameWithComponentInterface<EventsType>>(allEvents).slice(
+      generateRandomNumber(3, 1)
+    );
   };
 
-  const [eventList] =
-    useState<NameWithComponentInterface<RuinsEventsEnum>[]>(GenerateEventList);
+  const [eventList, setEventList] = useState<
+    NameWithComponentInterface<EventsType>[]
+  >([]);
+
+  useEffect(() => {
+    setEventList(GenerateEventList());
+  }, [allEvents]);
 
   const [eventId, setEventId] = useState<number>(eventList.length - 1);
 
   const [EventComponent, setEventComponent] = useState<
-    NameWithComponentInterface<RuinsEventsEnum>
+    NameWithComponentInterface<EventsType>
   >(eventList[eventId]);
 
   const EventFinished = () => {
@@ -56,6 +75,10 @@ export const JourneyContextProvider = ({
       </div>
     );
   };
+
+  useEffect(() => {
+    setEventId(eventList.length - 1);
+  }, [eventList]);
 
   useEffect(() => {
     if (eventId > 0) {
@@ -89,6 +112,7 @@ export const JourneyContextProvider = ({
         InitiateLooting: InitiateLooting,
         EventComponent: EventComponent,
         handleChangeEvent: handleChangeEvent,
+        setAllEvents: setAllEvents,
       }}
     >
       {children}

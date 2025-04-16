@@ -1,6 +1,7 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { GameMasterContext } from "@/Contexts/GameMasterContextProvider";
 import { GetLocationComponentByName } from "../Locations";
+import { useJourneyContext } from "@/utils/useContexts";
 
 //REWORK LOCATIONS
 //CURRENTLY LOCATION COMPONENTS ARE INITIALIZED ONCE IN THE LOCATION STORE AND CANT ACCEPT PROPS
@@ -8,10 +9,16 @@ import { GetLocationComponentByName } from "../Locations";
 
 const Journey = () => {
   const { player } = useContext(GameMasterContext);
+  const { setAllEvents } = useJourneyContext();
 
-  const LocationComponent = GetLocationComponentByName(
-    player.location.name
-  ).component;
+  const location = GetLocationComponentByName(player.location.name);
+
+  const LocationComponent = location.component;
+  const locationEvents = location.events;
+
+  useEffect(() => {
+    setAllEvents(locationEvents ?? []);
+  }, [locationEvents, setAllEvents]);
 
   return (
     <div>

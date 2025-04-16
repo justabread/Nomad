@@ -19,7 +19,6 @@ const GameWindow = () => {
         <div>First Aid kits: {player.aidItems}</div>
         <LocationsSelector />
       </div>
-
       <JourneyContextProvider>
         <Journey />
       </JourneyContextProvider>

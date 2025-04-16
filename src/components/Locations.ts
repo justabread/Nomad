@@ -11,6 +11,7 @@ import Ruins from "./Journey/Locations/Ruins/Ruins";
 import Fight from "./Journey/Locations/Fighting/Fighting";
 import { NameWithComponentInterface } from "@/Types/GameTypes";
 import Looting from "./Journey/Locations/Looting/Looting";
+import { RuinsEvents } from "./Journey/Locations/Ruins/RuinsEvents";
 
 export const JourneyLocationElements =
   (): NameWithComponentInterface<JourneyLocationsEnum>[] => [
@@ -21,6 +22,7 @@ export const JourneyLocationElements =
     {
       name: JourneyLocationsEnum.LOCATION_RUINS,
       component: Ruins,
+      events: RuinsEvents,
     },
   ];
 
@@ -77,7 +79,9 @@ export const GetAllLocationComponents = () => {
   return [...JourneyLocationElements(), ...UtilityLocationElements()];
 };
 
-export const GetLocationComponentByName = (locationName: LocationsType) => {
+export const GetLocationComponentByName = (
+  locationName: LocationsType
+): NameWithComponentInterface<LocationsType> => {
   const locationObject = GetAllLocationComponents().find(
     (element) => element.name === locationName
   );

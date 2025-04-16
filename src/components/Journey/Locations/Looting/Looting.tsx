@@ -1,9 +1,9 @@
-import { JourneyContext } from "@/Contexts/JourneyContextProvider";
 import { useContext } from "react";
 import { generateRandomNumber } from "../useGenerateRandoms";
 import { ItemPoolInterface, WeaponInterface } from "@/Types/ItemTypes";
 import { GameMasterContext } from "@/Contexts/GameMasterContextProvider";
 import { JourneyLocationsEnum } from "@/Types/LocationTypes";
+import { useJourneyContext } from "@/utils/useContexts";
 
 export interface LootingProps {
   title: string;
@@ -19,7 +19,7 @@ const Looting = ({
   const { player, setPlayer, setPlayerLocation } =
     useContext(GameMasterContext);
 
-  const { handleChangeEvent } = useContext(JourneyContext);
+  const { handleChangeEvent } = useJourneyContext();
 
   const itemPool: ItemPoolInterface = givenItemPool;
   const didPlayerFindWeapon: boolean = generateRandomNumber(100) <= 15;

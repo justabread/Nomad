@@ -8,6 +8,7 @@ import { generateRandomElement } from "../Journey/Locations/useGenerateRandoms";
 import { JourneyLocationElements } from "../Locations";
 import { GetAllWeapons, GetWeaponByName } from "../Weapons";
 import { WeaponNamesEnum } from "@/Types/ItemTypes";
+import { JourneyLocationsEnum } from "@/Types/LocationTypes";
 
 const Preparation = () => {
   const { player, setPlayer, setPlayerLocation } =
@@ -37,7 +38,8 @@ const Preparation = () => {
   };
 
   const StartGame = () => {
-    setPlayerLocation(generateRandomElement(JourneyLocationElements()).name);
+    // setPlayerLocation(generateRandomElement(JourneyLocationElements()).name);
+    setPlayerLocation(JourneyLocationsEnum.LOCATION_RUINS);
   };
 
   return (

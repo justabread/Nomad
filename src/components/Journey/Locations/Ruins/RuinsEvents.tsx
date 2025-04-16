@@ -6,12 +6,12 @@ import {
 
 import { RuinsEventsEnum } from "@/Types/EventTypes";
 import { NameWithComponentInterface } from "@/Types/GameTypes";
-import { JourneyContext } from "@/Contexts/JourneyContextProvider";
 import { JourneyLocationsEnum } from "@/Types/LocationTypes";
 import { DOG_CONSTANTS, EnemyInterface } from "@/Types/EnemyTypes";
 import { BANDIT_CONSTANTS } from "@/Types/EnemyTypes";
 import { GameMasterContext } from "@/Contexts/GameMasterContextProvider";
 import { GetItemPool } from "@/components/ItemPools";
+import { useJourneyContext } from "@/utils/useContexts";
 
 const enum BuildingConditionEnum {
   HALF_RUINED,
@@ -20,7 +20,7 @@ const enum BuildingConditionEnum {
 }
 
 const useHandleChangeEvent = () => {
-  const { handleChangeEvent } = useContext(JourneyContext);
+  const { handleChangeEvent } = useJourneyContext();
   return handleChangeEvent;
 };
 
@@ -33,18 +33,22 @@ const DidPlayerRunAwayFromEnemies = (chance: number): boolean => {
   return randomValue <= chance;
 };
 
-const RunAway = (enemies: EnemyInterface[], chance: number) => {
-  const { InitiateFight } = useContext(JourneyContext);
+const useRunAway = () => {
+  const { InitiateFight } = useJourneyContext();
   const handleChangeEvent = useHandleChangeEvent();
 
-  if (!DidPlayerRunAwayFromEnemies(chance)) {
-    InitiateFight({
-      startEnemies: enemies,
-      location: JourneyLocationsEnum.LOCATION_RUINS,
-    });
-  } else {
-    handleChangeEvent();
-  }
+  const RunAway = (enemies: EnemyInterface[], chance: number) => {
+    if (!DidPlayerRunAwayFromEnemies(chance)) {
+      InitiateFight({
+        startEnemies: enemies,
+        location: JourneyLocationsEnum.LOCATION_RUINS,
+      });
+    } else {
+      handleChangeEvent();
+    }
+  };
+
+  return RunAway;
 };
 
 const buildingConditions: NameWithComponentInterface<BuildingConditionEnum>[] =
@@ -136,7 +140,7 @@ const EventCalm = () => {
 };
 
 const EventBandits = () => {
-  const { InitiateFight } = useContext(JourneyContext);
+  const { InitiateFight } = useJourneyContext();
   const { player, setPlayer } = useContext(GameMasterContext);
   const randomBanditsNumber = generateRandomNumber(5, 3);
 
@@ -150,6 +154,8 @@ const EventBandits = () => {
   );
 
   const handleChangeEvent = useHandleChangeEvent();
+
+  const RunAway = useRunAway();
 
   return (
     <div>
@@ -203,7 +209,7 @@ const EventBandits = () => {
 };
 
 const EventMall = () => {
-  const { InitiateLooting } = useContext(JourneyContext);
+  const { InitiateLooting } = useJourneyContext();
   const RandomBuildingCondition =
     generateRandomElement(buildingConditions).component;
 
@@ -232,7 +238,7 @@ const EventMall = () => {
 };
 
 const EventStoreGuns = () => {
-  const { InitiateLooting } = useContext(JourneyContext);
+  const { InitiateLooting } = useJourneyContext();
   const RandomBuildingCondition =
     generateRandomElement(buildingConditions).component;
 
@@ -268,7 +274,7 @@ const EventRestaurant = () => {
     generateRandomElement(buildingConditions).component;
 
   const handleChangeEvent = useHandleChangeEvent();
-  const { InitiateLooting } = useContext(JourneyContext);
+  const { InitiateLooting } = useJourneyContext();
 
   return (
     <div>
@@ -297,7 +303,7 @@ const EventRestaurant = () => {
 const EventStorePharmacy = () => {
   const RandomBuildingCondition =
     generateRandomElement(buildingConditions).component;
-  const { InitiateLooting } = useContext(JourneyContext);
+  const { InitiateLooting } = useJourneyContext();
 
   const handleChangeEvent = useHandleChangeEvent();
 
@@ -363,7 +369,8 @@ const EventDogs = () => {
 
   const RandomDogNeed = generateRandomElement(possibleDogNeeds);
 
-  const { InitiateFight } = useContext(JourneyContext);
+  const { InitiateFight } = useJourneyContext();
+  const RunAway = useRunAway();
 
   const enemies: EnemyInterface[] = Array.from(
     { length: randomDogsNumber },

@@ -1,13 +1,12 @@
-import { JourneyContext } from "@/Contexts/JourneyContextProvider";
-import { useContext } from "react";
+import { useJourneyContext } from "@/utils/useContexts";
 
 const Ruins = () => {
-  const { EventComponent } = useContext(JourneyContext);
+  const { EventComponent } = useJourneyContext();
 
   return (
     <div className="UI-element">
       <h1>The ruins of an unknown city lay before you.</h1>
-      <EventComponent.component />
+      {EventComponent ? <EventComponent.component /> : null}
     </div>
   );
 };

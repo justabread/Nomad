@@ -5,7 +5,7 @@ import "@/styles/CommonStyles.css";
 import { generateRandomNumber } from "../useGenerateRandoms";
 import { EnemyInterface } from "@/Types/EnemyTypes";
 import { JourneyLocationsEnum } from "@/Types/LocationTypes";
-import { JourneyContext } from "@/Contexts/JourneyContextProvider";
+import { useJourneyContext } from "@/utils/useContexts";
 
 interface EnemyElementProps {
   index: number;
@@ -74,7 +74,7 @@ const Fight = ({
   const { player, setPlayer, setPlayerLocation } =
     useContext(GameMasterContext);
 
-  const { handleChangeEvent } = useContext(JourneyContext);
+  const { handleChangeEvent } = useJourneyContext();
 
   const QueueEvent = (event: string) => {
     setEvents((prev) => [...prev, event]);

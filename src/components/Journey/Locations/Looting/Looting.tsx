@@ -70,7 +70,7 @@ const Looting = ({ title, givenItemPool }: LootingProps) => {
       ) : null}
       <button
         onClick={() => {
-          const newPlayer = player;
+          const newPlayer = { ...player };
 
           if (itemPool.newAidItems) {
             newPlayer.aidItems += itemPool.newAidItems;

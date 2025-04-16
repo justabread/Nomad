@@ -16,16 +16,18 @@ const LocationsSelector = () => {
         <h2>Locations</h2>
         <div>Current Location: {player.location.name}</div>
         {JourneyLocationElements().map((element, i) => {
-          return (
-            <button
-              key={i}
-              onClick={() =>
-                setPlayerLocation(element.name as JourneyLocationsEnum)
-              }
-            >
-              {element.name}
-            </button>
-          );
+          if (element.name !== player.location.name) {
+            return (
+              <button
+                key={i}
+                onClick={() =>
+                  setPlayerLocation(element.name as JourneyLocationsEnum)
+                }
+              >
+                {element.name}
+              </button>
+            );
+          }
         })}
         <button
           onClick={() =>
@@ -33,11 +35,6 @@ const LocationsSelector = () => {
           }
         >
           Camp
-        </button>
-        <button
-          onClick={() => setPlayerLocation(UtilityLocationsEnum.LOCATION_FIGHT)}
-        >
-          Fight
         </button>
       </div>
     )

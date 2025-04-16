@@ -2,7 +2,6 @@ import "@/styles/CommonStyles.css";
 import { GameMasterContext } from "@/Contexts/GameMasterContextProvider";
 import { useContext } from "react";
 import styles from "./GameWindow.module.css";
-import LocationsSelector from "@/components/LocationsSelector/LocationsSelector";
 import Journey from "@/components/Journey/Journey";
 import { JourneyContextProvider } from "@/Contexts/JourneyContextProvider";
 
@@ -17,7 +16,6 @@ const GameWindow = () => {
         <div>Equipped Weapon: {player.weapon.name}</div>
         <div>Food: {player.foodItems}</div>
         <div>First Aid kits: {player.aidItems}</div>
-        <LocationsSelector />
       </div>
       <JourneyContextProvider>
         <Journey />

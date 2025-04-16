@@ -18,6 +18,7 @@ import { generateRandomNumber } from "@/components/Journey/Locations/useGenerate
 
 import Fight from "@/components/Journey/Locations/Fighting/Fighting";
 import Looting from "@/components/Journey/Locations/Looting/Looting";
+import LocationsSelector from "@/components/LocationsSelector/LocationsSelector";
 
 interface JourneyContextInterface {
   InitiateFight: (props: FightingProps) => void;
@@ -68,6 +69,7 @@ export const JourneyContextProvider = ({
     return (
       <div>
         <h2>You have exhausted your options here. It is time to move on.</h2>
+        <LocationsSelector />
       </div>
     );
   };

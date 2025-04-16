@@ -18,7 +18,7 @@ const PlayerCamp = () => {
               many times before, you are going to starve tonight. (-25 HP)
             </p>
           );
-        } else if (player.foodItems < 10 && player.foodItems > 1) {
+        } else if (player.foodItems < 3) {
           return (
             <p>
               You managed to scrape together enough food that you will at least
@@ -45,7 +45,7 @@ const PlayerCamp = () => {
                   ...prev,
                   health: prev.health - 25,
                 }));
-              } else if (player.foodItems < 10 && player.foodItems > 1) {
+              } else if (player.foodItems < 3) {
                 setPlayer((prev) => ({
                   ...prev,
                   foodItems: 0,

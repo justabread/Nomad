@@ -41,7 +41,6 @@ const useRunAway = () => {
     if (!DidPlayerRunAwayFromEnemies(chance)) {
       InitiateFight({
         startEnemies: enemies,
-        location: JourneyLocationsEnum.LOCATION_RUINS,
       });
     } else {
       handleChangeEvent();
@@ -171,7 +170,6 @@ const EventBandits = () => {
         onClick={() =>
           InitiateFight({
             startEnemies: enemies,
-            location: JourneyLocationsEnum.LOCATION_RUINS,
           })
         }
       >
@@ -188,7 +186,6 @@ const EventBandits = () => {
           } else {
             InitiateFight({
               startEnemies: enemies,
-              location: JourneyLocationsEnum.LOCATION_RUINS,
               initialEventMessage:
                 "You failed to find anything edible in your backpack. The bandits did not take this well.",
             });
@@ -389,7 +386,6 @@ const EventDogs = () => {
             onClick={() => {
               InitiateFight({
                 startEnemies: enemies,
-                location: JourneyLocationsEnum.LOCATION_RUINS,
               });
             }}
           >
@@ -414,7 +410,6 @@ const EventDogs = () => {
               } else {
                 InitiateFight({
                   startEnemies: enemies,
-                  location: JourneyLocationsEnum.LOCATION_RUINS,
                   initialEventMessage:
                     "You failed to find anything edible in your backpack. The dogs did not take this well.",
                 });

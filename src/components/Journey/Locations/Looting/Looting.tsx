@@ -11,13 +11,8 @@ export interface LootingProps {
   locationWhereLooting: JourneyLocationsEnum;
 }
 
-const Looting = ({
-  title,
-  givenItemPool,
-  locationWhereLooting,
-}: LootingProps) => {
-  const { player, setPlayer, setPlayerLocation } =
-    useContext(GameMasterContext);
+const Looting = ({ title, givenItemPool }: LootingProps) => {
+  const { player, setPlayer } = useContext(GameMasterContext);
 
   const { handleChangeEvent } = useJourneyContext();
 
@@ -87,7 +82,6 @@ const Looting = ({
 
           setPlayer(newPlayer);
           handleChangeEvent();
-          setPlayerLocation(locationWhereLooting);
         }}
       >
         Continue

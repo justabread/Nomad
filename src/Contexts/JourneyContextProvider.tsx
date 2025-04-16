@@ -2,19 +2,22 @@ import {
   createContext,
   Dispatch,
   SetStateAction,
-  useContext,
   useEffect,
   useState,
 } from "react";
-import { GameMasterContext } from "./GameMasterContextProvider";
-import { UtilityLocationsEnum } from "@/Types/LocationTypes";
-
 import { LootingProps } from "@/components/Journey/Locations/Looting/Looting";
 import { FightingProps } from "@/components/Journey/Locations/Fighting/Fighting";
 import { NameWithComponentInterface } from "@/Types/GameTypes";
-import { EventsType, RuinsEventsEnum } from "@/Types/EventTypes";
+import {
+  EventsType,
+  RuinsEventsEnum,
+  UtilEventsEnum,
+} from "@/Types/EventTypes";
 import { Shuffle } from "@/utils/Utils";
 import { generateRandomNumber } from "@/components/Journey/Locations/useGenerateRandoms";
+
+import Fight from "@/components/Journey/Locations/Fighting/Fighting";
+import Looting from "@/components/Journey/Locations/Looting/Looting";
 
 interface JourneyContextInterface {
   InitiateFight: (props: FightingProps) => void;
@@ -47,26 +50,19 @@ export const JourneyContextProvider = ({
   const [allEvents, setAllEvents] = useState<
     NameWithComponentInterface<EventsType>[]
   >([]);
+  const [eventList, setEventList] = useState<
+    NameWithComponentInterface<EventsType>[]
+  >([]);
+  const [eventId, setEventId] = useState<number>(eventList.length - 1);
+  const [EventComponent, setEventComponent] = useState<
+    NameWithComponentInterface<EventsType>
+  >(eventList[eventId]);
 
   const GenerateEventList = () => {
     return Shuffle<NameWithComponentInterface<EventsType>>(allEvents).slice(
       generateRandomNumber(3, 1)
     );
   };
-
-  const [eventList, setEventList] = useState<
-    NameWithComponentInterface<EventsType>[]
-  >([]);
-
-  useEffect(() => {
-    setEventList(GenerateEventList());
-  }, [allEvents]);
-
-  const [eventId, setEventId] = useState<number>(eventList.length - 1);
-
-  const [EventComponent, setEventComponent] = useState<
-    NameWithComponentInterface<EventsType>
-  >(eventList[eventId]);
 
   const EventFinished = () => {
     return (
@@ -75,6 +71,28 @@ export const JourneyContextProvider = ({
       </div>
     );
   };
+
+  const handleChangeEvent = () => {
+    setEventId((prevId) => prevId - 1);
+  };
+
+  const InitiateFight = (props: FightingProps) => {
+    setEventComponent({
+      name: UtilEventsEnum.EVENT_FIGHT,
+      component: () => Fight(props),
+    });
+  };
+
+  const InitiateLooting = (props: LootingProps) => {
+    setEventComponent({
+      name: UtilEventsEnum.EVENT_LOOTING,
+      component: () => Looting(props),
+    });
+  };
+
+  useEffect(() => {
+    setEventList(GenerateEventList());
+  }, [allEvents]);
 
   useEffect(() => {
     setEventId(eventList.length - 1);
@@ -90,20 +108,6 @@ export const JourneyContextProvider = ({
       });
     }
   }, [eventId]);
-
-  const handleChangeEvent = () => {
-    setEventId((prevId) => prevId - 1);
-  };
-
-  const { setPlayerLocation } = useContext(GameMasterContext);
-
-  const InitiateFight = (props: FightingProps) => {
-    setPlayerLocation(UtilityLocationsEnum.LOCATION_FIGHT, props);
-  };
-
-  const InitiateLooting = (props: LootingProps) => {
-    setPlayerLocation(UtilityLocationsEnum.LOCATION_LOOTING, props);
-  };
 
   return (
     <JourneyContext.Provider

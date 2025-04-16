@@ -4,7 +4,6 @@ import styles from "./Fighting.module.css";
 import "@/styles/CommonStyles.css";
 import { generateRandomNumber } from "../useGenerateRandoms";
 import { EnemyInterface } from "@/Types/EnemyTypes";
-import { JourneyLocationsEnum } from "@/Types/LocationTypes";
 import { useJourneyContext } from "@/utils/useContexts";
 
 interface EnemyElementProps {
@@ -19,7 +18,6 @@ interface EnemyElementProps {
 
 export interface FightingProps {
   startEnemies: EnemyInterface[];
-  location: JourneyLocationsEnum;
   initialEventMessage?: string;
 }
 
@@ -56,11 +54,7 @@ const EnemyElement = ({
   );
 };
 
-const Fight = ({
-  startEnemies,
-  location,
-  initialEventMessage,
-}: FightingProps) => {
+const Fight = ({ startEnemies, initialEventMessage }: FightingProps) => {
   const [turn, setTurn] = useState<number>(1);
   const [playerActionsPerTurn, setPlayerActionsPerTurn] = useState<number>(0);
   const [events, setEvents] = useState<string[]>(
@@ -71,8 +65,7 @@ const Fight = ({
 
   const [enemies, setEnemies] = useState<EnemyInterface[]>(startEnemies);
 
-  const { player, setPlayer, setPlayerLocation } =
-    useContext(GameMasterContext);
+  const { player, setPlayer } = useContext(GameMasterContext);
 
   const { handleChangeEvent } = useJourneyContext();
 
@@ -141,7 +134,6 @@ const Fight = ({
 
   const EndFight = () => {
     handleChangeEvent();
-    setPlayerLocation(location);
     // setPlayer((prev) => ({
     //   ...prev,
     //   location: { name: prev.currentFight.location },

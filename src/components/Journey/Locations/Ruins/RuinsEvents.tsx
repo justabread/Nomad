@@ -108,7 +108,7 @@ const EventCalm = () => {
 
 const EventBandits = () => {
   const { InitiateFight, handleChangeEvent } = useJourneyContext();
-  const { player, setPlayer } = useGameMasterContext();
+  const { player, setPlayerFoodItems } = useGameMasterContext();
   const randomBanditsNumber = generateRandomNumber(5, 3);
 
   const enemies: EnemyInterface[] = Array.from(
@@ -144,10 +144,7 @@ const EventBandits = () => {
       <button
         onClick={() => {
           if (player.foodItems > 0) {
-            setPlayer((prev) => ({
-              ...prev,
-              foodItems: 0,
-            }));
+            setPlayerFoodItems(0);
             handleChangeEvent();
           } else {
             InitiateFight({
@@ -285,7 +282,7 @@ const EventStorePharmacy = () => {
 };
 
 const EventDogs = () => {
-  const { player, setPlayer } = useGameMasterContext();
+  const { player, setPlayerFoodItems } = useGameMasterContext();
   const { handleChangeEvent, InitiateFight } = useJourneyContext();
 
   const enum DogNeeds {
@@ -355,17 +352,7 @@ const EventDogs = () => {
             <button
               onClick={() => {
                 if (player.foodItems > 0) {
-                  if (player.foodItems > 2)
-                    setPlayer((prev) => ({
-                      ...prev,
-                      foodItems: prev.foodItems - 2,
-                    }));
-                  else {
-                    setPlayer((prev) => ({
-                      ...prev,
-                      foodItems: 0,
-                    }));
-                  }
+                  setPlayerFoodItems(player.foodItems - 2);
                   handleChangeEvent();
                 } else {
                   InitiateFight({

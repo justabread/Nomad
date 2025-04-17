@@ -65,7 +65,8 @@ const Fight = ({ startEnemies, initialEventMessage }: FightingProps) => {
 
   const [enemies, setEnemies] = useState<EnemyInterface[]>(startEnemies);
 
-  const { player, setPlayer } = useContext(GameMasterContext);
+  const { player, setPlayerHealth, setPlayerHealthItems } =
+    useContext(GameMasterContext);
 
   const { handleChangeEvent } = useJourneyContext();
 
@@ -77,10 +78,7 @@ const Fight = ({ startEnemies, initialEventMessage }: FightingProps) => {
     FindValidEnemies(enemies).map((enemy) => {
       const inflictedDamage = generateRandomNumber(enemy.maxDamage, 0);
 
-      setPlayer((prev) => ({
-        ...prev,
-        health: prev.health - inflictedDamage,
-      }));
+      setPlayerHealth(player.health - inflictedDamage);
 
       if (inflictedDamage > 0) {
         QueueEvent(
@@ -134,10 +132,6 @@ const Fight = ({ startEnemies, initialEventMessage }: FightingProps) => {
 
   const EndFight = () => {
     handleChangeEvent();
-    // setPlayer((prev) => ({
-    //   ...prev,
-    //   location: { name: prev.currentFight.location },
-    // }));
   };
 
   //MAKE HEALING PART A PLAYER ACTION INSTEAD OF AN INDEPENDENT EVENT
@@ -145,40 +139,21 @@ const Fight = ({ startEnemies, initialEventMessage }: FightingProps) => {
   const HealPlayer = () => {
     if (player.health >= 100) {
       QueueEvent("Your health is already at maximum.");
-    } else if (player.aidItems <= 0) {
+    } else if (player.healthItems <= 0) {
       QueueEvent("You do not have any items to heal with.");
     } else {
       if (player.health > 90) {
         const amountToHeal = 100 - player.health;
-        setPlayer((prev) => ({
-          ...prev,
-          health: 100,
-          aidItems: prev.aidItems - 1,
-        }));
-
+        setPlayerHealth(100);
         QueueEvent(`Player was healed for ${amountToHeal} health points.`);
       } else {
-        setPlayer((prev) => ({
-          ...prev,
-          health: prev.health + 10,
-          aidItems: prev.aidItems - 1,
-        }));
-
+        setPlayerHealth(player.health + 10);
         QueueEvent("Player was healed for 10 health points.");
       }
+
+      setPlayerHealthItems(player.healthItems - 1);
     }
   };
-
-  // useEffect(() => {
-  //   if (FindValidEnemies(player.currentFight.enemies).length === 0) {
-  //     setIsFightOver(true);
-  //   }
-  //   if (playerActionsPerTurn >= MAX_PLAYER_ACTIONS_PER_TURN) {
-  //     EnemyTurn();
-  //     setPlayerActionsPerTurn(0);
-  //     setTurn((prev) => prev + 1);
-  //   }
-  // }, [playerActionsPerTurn]);
 
   return (
     <div className={styles.fightElement}>

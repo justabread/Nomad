@@ -27,3 +27,9 @@ export const WOLF_CONSTANTS: EnemyConstants = {
   MAX_DAMAGE: 15,
   CHANCE_TO_RUN_FROM: 60,
 };
+
+export const COTTAGE_INHABITANT_CONSTANTS: EnemyConstants = {
+  MAX_HEALTH: 150,
+  MAX_DAMAGE: 30,
+  CHANCE_TO_RUN_FROM: 50,
+};

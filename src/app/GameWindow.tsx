@@ -15,7 +15,7 @@ const GameWindow = () => {
         <div>Health: {player.health}</div>
         <div>Equipped Weapon: {player.weapon.name}</div>
         <div>Food: {player.foodItems}</div>
-        <div>First Aid kits: {player.aidItems}</div>
+        <div>First Aid kits: {player.healthItems}</div>
       </div>
       <JourneyContextProvider>
         <Journey />

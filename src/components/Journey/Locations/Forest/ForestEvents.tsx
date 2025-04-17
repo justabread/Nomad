@@ -1,4 +1,8 @@
-import { EnemyInterface, WOLF_CONSTANTS } from "@/Types/EnemyTypes";
+import {
+  COTTAGE_INHABITANT_CONSTANTS,
+  EnemyInterface,
+  WOLF_CONSTANTS,
+} from "@/Types/EnemyTypes";
 import { ForestEventsEnum } from "@/Types/EventTypes";
 import { NameWithComponentInterface } from "@/Types/GameTypes";
 import { useGameMasterContext, useJourneyContext } from "@/utils/useContexts";
@@ -90,17 +94,175 @@ const EventCave = () => {
 };
 
 const EventCottage = () => {
-  const { handleChangeEvent } = useJourneyContext();
+  const { player, setPlayerHealth } = useGameMasterContext();
+  const { handleChangeEvent, InitiateFight } = useJourneyContext();
+  const RunAway = useRunAway();
+
+  const enum CottageEventsEnum {
+    INHABITANT_CALM,
+    INHABITANT_HOSTILE,
+    WOLF_CALM,
+    WOLF_HOSTILE,
+    EMPTY,
+  }
+
+  let enemies: EnemyInterface[] = [];
+
+  const possibleCottageEvents: NameWithComponentInterface<CottageEventsEnum>[] =
+    [
+      {
+        name: CottageEventsEnum.INHABITANT_CALM,
+        component: () => (
+          <>
+            <p>
+              As you enter, you realize it is not abandoned. Inside, a person
+              sits in front of a lit fireplace, drinking from a stained metal
+              mug. He looks at you, motions towards a chair next to him and
+              turns back towards the fire. You decide to sit with him and rest
+              your body. (+25 HP) After some time, you stand up, wish him luck
+              and return to your journey.
+            </p>
+            <button
+              onClick={() => {
+                setPlayerHealth(player.health + 25);
+                handleChangeEvent();
+              }}
+            >
+              Continue
+            </button>
+          </>
+        ),
+      },
+      {
+        name: CottageEventsEnum.INHABITANT_HOSTILE,
+        component: () => {
+          enemies = [
+            {
+              name: "Angry Cottage Inhabitant",
+              health: GenerateRandomHealth(
+                COTTAGE_INHABITANT_CONSTANTS.MAX_HEALTH
+              ),
+              maxDamage: COTTAGE_INHABITANT_CONSTANTS.MAX_DAMAGE,
+            },
+          ];
+          return (
+            <>
+              <p>
+                As you enter, a gunshot rings out from inside and a bullet
+                wedges itself into the wall just inches from your head. You are
+                about to fight for this cottage.
+              </p>
+              <button
+                onClick={() => {
+                  InitiateFight({ startEnemies: enemies });
+                }}
+              >
+                Fight
+              </button>
+              <button
+                onClick={() => {
+                  RunAway(
+                    enemies,
+                    COTTAGE_INHABITANT_CONSTANTS.CHANCE_TO_RUN_FROM
+                  );
+                }}
+              >
+                Run
+              </button>
+            </>
+          );
+        },
+      },
+      {
+        name: CottageEventsEnum.WOLF_CALM,
+        component: () => (
+          <>
+            <p>
+              You enter the building and see a wounded wolf laying on the floor
+              inside. It notices you, tries to stand up but falls back onto the
+              floor. You notice, that one of it&apos;s paw is wounded. You sit
+              down onto the floor a good distance from it, signaling that you
+              dont&apos;t want any trouble, just rest. The two of you share the
+              time in silence, and after a while, you stand up, nod to the wolf
+              and continue on your way. (+25 HP)
+            </p>
+            <button
+              onClick={() => {
+                setPlayerHealth(player.health + 25);
+                handleChangeEvent();
+              }}
+            >
+              Continue
+            </button>
+          </>
+        ),
+      },
+      {
+        name: CottageEventsEnum.WOLF_HOSTILE,
+        component: () => {
+          enemies = [
+            {
+              name: "Cottage Wolf",
+              health: GenerateRandomHealth(WOLF_CONSTANTS.MAX_HEALTH),
+              maxDamage: WOLF_CONSTANTS.MAX_DAMAGE,
+            },
+          ];
+          return (
+            <>
+              <p>
+                You step through the door, without noticing the warning growls
+                eminating from inside. Before you know it, you are face to face
+                with the current claimant of the shelter. You are about to fight
+                with them for it.
+              </p>
+              <button
+                onClick={() => {
+                  InitiateFight({ startEnemies: enemies });
+                }}
+              >
+                Fight
+              </button>
+              <button
+                onClick={() => {
+                  RunAway(enemies, WOLF_CONSTANTS.CHANCE_TO_RUN_FROM);
+                }}
+              >
+                Run
+              </button>
+            </>
+          );
+        },
+      },
+      {
+        name: CottageEventsEnum.EMPTY,
+        component: () => (
+          <>
+            <p>
+              The building is empty, long abandoned by it&apos;s previous
+              inhabitants. Fortunately, there are still enough supplies to make
+              a fire and rest here for a bit, although the loneliness, as usual,
+              does not make for good company. (+10 HP)
+            </p>
+            <button
+              onClick={() => {
+                setPlayerHealth(player.health + 10);
+                handleChangeEvent();
+              }}
+            >
+              Continue
+            </button>
+          </>
+        ),
+      },
+    ];
+
+  const RandomCottageEvent = generateRandomElement(
+    possibleCottageEvents
+  ).component;
   return (
     <div>
       <h2>You stumble upon a cottage.</h2>
-      <button
-        onClick={() => {
-          handleChangeEvent();
-        }}
-      >
-        Continue
-      </button>
+      <RandomCottageEvent />
     </div>
   );
 };

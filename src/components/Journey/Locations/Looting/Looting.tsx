@@ -12,7 +12,7 @@ export interface LootingProps {
 }
 
 const Looting = ({ title, givenItemPool }: LootingProps) => {
-  const { player, setPlayer } = useContext(GameMasterContext);
+  const { player, setPlayer, setPlayerWeapon } = useContext(GameMasterContext);
 
   const { handleChangeEvent } = useJourneyContext();
 
@@ -54,10 +54,7 @@ const Looting = ({ title, givenItemPool }: LootingProps) => {
             <button
               onClick={() => {
                 if (itemPool.newWeapon) {
-                  setPlayer((prev) => ({
-                    ...prev,
-                    weapon: itemPool.newWeapon as WeaponInterface,
-                  }));
+                  setPlayerWeapon(itemPool.newWeapon as WeaponInterface);
                 }
               }}
             >
@@ -73,7 +70,7 @@ const Looting = ({ title, givenItemPool }: LootingProps) => {
           const newPlayer = { ...player };
 
           if (itemPool.newAidItems) {
-            newPlayer.aidItems += itemPool.newAidItems;
+            newPlayer.healthItems += itemPool.newAidItems;
           }
 
           if (itemPool.newFoodItems) {

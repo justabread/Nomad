@@ -8,10 +8,15 @@ import {
 
 import { LocationsType, UtilityLocationsEnum } from "@/Types/LocationTypes";
 import { InitialPlayerState, PlayerInterface } from "@/components/Player";
+import { WeaponInterface } from "@/Types/ItemTypes";
 
 interface GameMasterContextInterface {
   player: PlayerInterface;
   setPlayer: Dispatch<SetStateAction<PlayerInterface>>;
+  setPlayerHealth: (newHealth: number) => void;
+  setPlayerFoodItems: (newFoodItems: number) => void;
+  setPlayerHealthItems: (newHealthItems: number) => void;
+  setPlayerWeapon: (newWeapon: WeaponInterface) => void;
   setPlayerLocation: (newLocation: LocationsType, props?: any) => void;
 }
 
@@ -24,6 +29,10 @@ interface GameMasterContextInterface {
 export const GameMasterContext = createContext<GameMasterContextInterface>({
   player: InitialPlayerState,
   setPlayer: () => {},
+  setPlayerHealth: () => {},
+  setPlayerFoodItems: () => {},
+  setPlayerHealthItems: () => {},
+  setPlayerWeapon: () => {},
   setPlayerLocation: () => {},
 });
 
@@ -33,6 +42,25 @@ export const GameMasterContextProvider = ({
   children: React.ReactNode;
 }) => {
   const [player, setPlayer] = useState<PlayerInterface>(InitialPlayerState);
+
+  const setPlayerValue = (property: keyof typeof player, newValue: number) => {
+    if (newValue > 0 && newValue < 100) {
+      setPlayer((prev) => ({
+        ...prev,
+        [property]: newValue,
+      }));
+    } else if (newValue < 0) {
+      setPlayer((prev) => ({
+        ...prev,
+        [property]: 0,
+      }));
+    } else {
+      setPlayer((prev) => ({
+        ...prev,
+        [property]: 100,
+      }));
+    }
+  };
 
   const SetPlayerLocation = (newLocationName: LocationsType, props?: any) => {
     setPlayer((prev) => ({
@@ -52,6 +80,18 @@ export const GameMasterContextProvider = ({
       value={{
         player,
         setPlayer,
+        setPlayerHealth: (newHealth: number) =>
+          setPlayerValue("health", newHealth),
+        setPlayerFoodItems: (newFoodItems: number) =>
+          setPlayerValue("foodItems", newFoodItems),
+        setPlayerHealthItems: (newHealthItems: number) =>
+          setPlayerValue("healthItems", newHealthItems),
+        setPlayerWeapon: (newWeapon: WeaponInterface) => {
+          setPlayer((prev) => ({
+            ...prev,
+            weapon: newWeapon,
+          }));
+        },
         setPlayerLocation: SetPlayerLocation,
       }}
     >

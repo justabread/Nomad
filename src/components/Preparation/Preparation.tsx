@@ -8,16 +8,13 @@ import { WeaponNamesEnum } from "@/Types/ItemTypes";
 import { JourneyLocationsEnum } from "@/Types/LocationTypes";
 
 const Preparation = () => {
-  const { player, setPlayer, setPlayerLocation } =
+  const { player, setPlayer, setPlayerWeapon, setPlayerLocation } =
     useContext(GameMasterContext);
 
   const handleWeaponChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const weaponToSet = GetWeaponByName(e.target.value as WeaponNamesEnum);
 
-    setPlayer((prev) => ({
-      ...prev,
-      weapon: weaponToSet,
-    }));
+    setPlayerWeapon(weaponToSet);
   };
 
   const handleMindChange = (e: ChangeEvent<HTMLSelectElement>) => {

@@ -2,9 +2,9 @@ import { GameMasterContext } from "@/Contexts/GameMasterContextProvider";
 import { Dispatch, SetStateAction, useContext, useState } from "react";
 import styles from "./Fighting.module.css";
 import "@/styles/CommonStyles.css";
-import { generateRandomNumber } from "../useGenerateRandoms";
 import { EnemyInterface } from "@/Types/EnemyTypes";
 import { useJourneyContext } from "@/utils/useContexts";
+import { generateRandomNumber } from "@/utils/Utils";
 
 interface EnemyElementProps {
   index: number;

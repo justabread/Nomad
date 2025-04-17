@@ -1,11 +1,8 @@
 import { ItemPoolInterface } from "@/Types/ItemTypes";
 import { EventsType, RuinsEventsEnum } from "@/Types/EventTypes";
 import { WeaponNamesEnum } from "@/Types/ItemTypes";
-import {
-  generateRandomNumber,
-  generateRandomElement,
-} from "./Journey/Locations/useGenerateRandoms";
 import { GetAllWeapons } from "./Weapons";
+import { generateRandomElement, generateRandomNumber } from "@/utils/Utils";
 
 const ItemPoolObjects: ItemPoolInterface[] = [
   {

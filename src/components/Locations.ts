@@ -12,12 +12,14 @@ import Fight from "./Journey/Locations/Fighting/Fighting";
 import { NameWithComponentInterface } from "@/Types/GameTypes";
 import Looting from "./Journey/Locations/Looting/Looting";
 import { RuinsEvents } from "./Journey/Locations/Ruins/RuinsEvents";
+import { ForestEvents } from "./Journey/Locations/Forest/ForestEvents";
 
 export const JourneyLocationElements =
   (): NameWithComponentInterface<JourneyLocationsEnum>[] => [
     {
       name: JourneyLocationsEnum.LOCATION_FOREST,
       component: Forest,
+      events: ForestEvents,
     },
     {
       name: JourneyLocationsEnum.LOCATION_RUINS,

@@ -1,54 +1,22 @@
-import { useContext } from "react";
 import {
   generateRandomElement,
+  GenerateRandomHealth,
   generateRandomNumber,
-} from "../useGenerateRandoms";
-
+  useRunAway,
+} from "@/utils/Utils";
 import { RuinsEventsEnum } from "@/Types/EventTypes";
 import { NameWithComponentInterface } from "@/Types/GameTypes";
 import { JourneyLocationsEnum } from "@/Types/LocationTypes";
 import { DOG_CONSTANTS, EnemyInterface } from "@/Types/EnemyTypes";
 import { BANDIT_CONSTANTS } from "@/Types/EnemyTypes";
-import { GameMasterContext } from "@/Contexts/GameMasterContextProvider";
 import { GetItemPool } from "@/components/ItemPools";
-import { useJourneyContext } from "@/utils/useContexts";
+import { useGameMasterContext, useJourneyContext } from "@/utils/useContexts";
 
 const enum BuildingConditionEnum {
   HALF_RUINED,
   FULLY_RUINED,
   BURNED_OUT,
 }
-
-const useHandleChangeEvent = () => {
-  const { handleChangeEvent } = useJourneyContext();
-  return handleChangeEvent;
-};
-
-const GenerateRandomHealth = (max_health: number): number => {
-  return Math.round(generateRandomNumber(max_health, 10) / 10) * 10;
-};
-
-const DidPlayerRunAwayFromEnemies = (chance: number): boolean => {
-  const randomValue = generateRandomNumber(100, 1);
-  return randomValue <= chance;
-};
-
-const useRunAway = () => {
-  const { InitiateFight } = useJourneyContext();
-  const handleChangeEvent = useHandleChangeEvent();
-
-  const RunAway = (enemies: EnemyInterface[], chance: number) => {
-    if (!DidPlayerRunAwayFromEnemies(chance)) {
-      InitiateFight({
-        startEnemies: enemies,
-      });
-    } else {
-      handleChangeEvent();
-    }
-  };
-
-  return RunAway;
-};
 
 const buildingConditions: NameWithComponentInterface<BuildingConditionEnum>[] =
   [
@@ -125,7 +93,7 @@ const EventCalm = () => {
 
   const RandomCalmEvent = generateRandomElement(possibleCalmEvents).component;
 
-  const handleChangeEvent = useHandleChangeEvent();
+  const { handleChangeEvent } = useJourneyContext();
 
   return (
     <div>
@@ -139,8 +107,8 @@ const EventCalm = () => {
 };
 
 const EventBandits = () => {
-  const { InitiateFight } = useJourneyContext();
-  const { player, setPlayer } = useContext(GameMasterContext);
+  const { InitiateFight, handleChangeEvent } = useJourneyContext();
+  const { player, setPlayer } = useGameMasterContext();
   const randomBanditsNumber = generateRandomNumber(5, 3);
 
   const enemies: EnemyInterface[] = Array.from(
@@ -151,8 +119,6 @@ const EventBandits = () => {
       maxDamage: BANDIT_CONSTANTS.MAX_DAMAGE,
     })
   );
-
-  const handleChangeEvent = useHandleChangeEvent();
 
   const RunAway = useRunAway();
 
@@ -192,7 +158,7 @@ const EventBandits = () => {
           }
         }}
       >
-        Give them your food
+        Give them all your food
       </button>
       <button
         onClick={() => {
@@ -206,11 +172,9 @@ const EventBandits = () => {
 };
 
 const EventMall = () => {
-  const { InitiateLooting } = useJourneyContext();
+  const { InitiateLooting, handleChangeEvent } = useJourneyContext();
   const RandomBuildingCondition =
     generateRandomElement(buildingConditions).component;
-
-  const handleChangeEvent = useHandleChangeEvent();
 
   return (
     <div>
@@ -235,11 +199,9 @@ const EventMall = () => {
 };
 
 const EventStoreGuns = () => {
-  const { InitiateLooting } = useJourneyContext();
+  const { InitiateLooting, handleChangeEvent } = useJourneyContext();
   const RandomBuildingCondition =
     generateRandomElement(buildingConditions).component;
-
-  const handleChangeEvent = useHandleChangeEvent();
 
   return (
     <div>
@@ -269,9 +231,7 @@ const EventStoreGuns = () => {
 const EventRestaurant = () => {
   const RandomBuildingCondition =
     generateRandomElement(buildingConditions).component;
-
-  const handleChangeEvent = useHandleChangeEvent();
-  const { InitiateLooting } = useJourneyContext();
+  const { InitiateLooting, handleChangeEvent } = useJourneyContext();
 
   return (
     <div>
@@ -300,9 +260,7 @@ const EventRestaurant = () => {
 const EventStorePharmacy = () => {
   const RandomBuildingCondition =
     generateRandomElement(buildingConditions).component;
-  const { InitiateLooting } = useJourneyContext();
-
-  const handleChangeEvent = useHandleChangeEvent();
+  const { InitiateLooting, handleChangeEvent } = useJourneyContext();
 
   return (
     <div>
@@ -327,9 +285,8 @@ const EventStorePharmacy = () => {
 };
 
 const EventDogs = () => {
-  const { player } = useContext(GameMasterContext);
-
-  const handleChangeEvent = useHandleChangeEvent();
+  const { player, setPlayer } = useGameMasterContext();
+  const { handleChangeEvent, InitiateFight } = useJourneyContext();
 
   const enum DogNeeds {
     HUNGRY,
@@ -337,36 +294,8 @@ const EventDogs = () => {
     ANGRY,
   }
 
-  const possibleDogNeeds: NameWithComponentInterface<DogNeeds>[] = [
-    {
-      name: DogNeeds.HUNGRY,
-      component: () => (
-        <p>
-          The are about to attack but you might be able to calm them down with
-          some of your food.
-        </p>
-      ),
-    },
-    {
-      name: DogNeeds.PETS,
-      component: () => (
-        <p>
-          One of them walks up to you slowly and you pet them. They seem
-          friendly now.
-        </p>
-      ),
-    },
-    {
-      name: DogNeeds.ANGRY,
-      component: () => <p>They are aggressive.</p>,
-    },
-  ];
-
   const randomDogsNumber = generateRandomNumber(3, 5);
 
-  const RandomDogNeed = generateRandomElement(possibleDogNeeds);
-
-  const { InitiateFight } = useJourneyContext();
   const RunAway = useRunAway();
 
   const enemies: EnemyInterface[] = Array.from(
@@ -378,64 +307,122 @@ const EventDogs = () => {
     })
   );
 
-  const renderDogResponse = () => {
-    if (RandomDogNeed.name === DogNeeds.ANGRY) {
-      return (
+  const possibleDogNeeds: NameWithComponentInterface<DogNeeds>[] = [
+    {
+      name: DogNeeds.HUNGRY,
+      component: () => (
         <>
-          <button
-            onClick={() => {
-              InitiateFight({
-                startEnemies: enemies,
-              });
-            }}
-          >
-            Fight
-          </button>
-          <button
-            onClick={() => {
-              RunAway(enemies, DOG_CONSTANTS.CHANCE_TO_RUN_FROM);
-            }}
-          >
-            Run
-          </button>
+          <p>
+            The are about to attack but you might be able to calm them down with
+            some of your food.
+          </p>
+          <div>
+            <button
+              onClick={() => {
+                if (player.foodItems > 0) {
+                  handleChangeEvent();
+                } else {
+                  InitiateFight({
+                    startEnemies: enemies,
+                    initialEventMessage:
+                      "You failed to find anything edible in your backpack. The dogs did not take this well.",
+                  });
+                }
+              }}
+            >
+              Give them food
+            </button>
+            <button
+              onClick={() => {
+                RunAway(enemies, DOG_CONSTANTS.CHANCE_TO_RUN_FROM);
+              }}
+            >
+              Run
+            </button>
+          </div>
         </>
-      );
-    } else if (RandomDogNeed.name === DogNeeds.HUNGRY) {
-      return (
+      ),
+    },
+    {
+      name: DogNeeds.PETS,
+      component: () => (
         <>
-          <button
-            onClick={() => {
-              if (player.foodItems > 0) {
-                handleChangeEvent();
-              } else {
+          <p>
+            One of them walks up to you slowly and you pet them. They seem
+            friendly now.
+          </p>
+          <div>
+            <button
+              onClick={() => {
+                if (player.foodItems > 0) {
+                  if (player.foodItems > 2)
+                    setPlayer((prev) => ({
+                      ...prev,
+                      foodItems: prev.foodItems - 2,
+                    }));
+                  else {
+                    setPlayer((prev) => ({
+                      ...prev,
+                      foodItems: 0,
+                    }));
+                  }
+                  handleChangeEvent();
+                } else {
+                  InitiateFight({
+                    startEnemies: enemies,
+                    initialEventMessage:
+                      "You failed to find anything edible in your backpack. The dogs did not take this well.",
+                  });
+                }
+              }}
+            >
+              Give them some food
+            </button>
+            <button
+              onClick={() => {
+                RunAway(enemies, DOG_CONSTANTS.CHANCE_TO_RUN_FROM);
+              }}
+            >
+              Run
+            </button>
+          </div>
+        </>
+      ),
+    },
+    {
+      name: DogNeeds.ANGRY,
+      component: () => (
+        <>
+          <p>They are aggressive.</p>
+          <div>
+            <button
+              onClick={() => {
                 InitiateFight({
                   startEnemies: enemies,
-                  initialEventMessage:
-                    "You failed to find anything edible in your backpack. The dogs did not take this well.",
                 });
-              }
-            }}
-          >
-            Give them food
-          </button>
-          <button
-            onClick={() => {
-              RunAway(enemies, DOG_CONSTANTS.CHANCE_TO_RUN_FROM);
-            }}
-          >
-            Run
-          </button>
+              }}
+            >
+              Fight
+            </button>
+            <button
+              onClick={() => {
+                RunAway(enemies, DOG_CONSTANTS.CHANCE_TO_RUN_FROM);
+              }}
+            >
+              Run
+            </button>
+          </div>
         </>
-      );
-    }
-  };
+      ),
+    },
+  ];
+
+  const RandomDogNeed = generateRandomElement(possibleDogNeeds);
 
   return (
     <div>
       <h2>You encounter a pack of {randomDogsNumber} dogs.</h2>
       <RandomDogNeed.component />
-      {renderDogResponse()}
-      <button onClick={handleChangeEvent}>Continue</button>
     </div>
   );
 };

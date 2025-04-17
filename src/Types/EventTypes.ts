@@ -6,7 +6,10 @@ export enum UtilEventsEnum {
 
 export enum ForestEventsEnum {
   EVENT_CALM,
-  EVENT_WOLF,
+  EVENT_WOLVES,
+  EVENT_COTTAGE,
+  EVENT_CAVE,
+  EVENT_LAKE,
 }
 
 export enum RuinsEventsEnum {

@@ -1,9 +1,9 @@
 import { useContext } from "react";
-import { generateRandomNumber } from "../useGenerateRandoms";
 import { ItemPoolInterface, WeaponInterface } from "@/Types/ItemTypes";
 import { GameMasterContext } from "@/Contexts/GameMasterContextProvider";
 import { JourneyLocationsEnum } from "@/Types/LocationTypes";
 import { useJourneyContext } from "@/utils/useContexts";
+import { generateRandomNumber } from "@/utils/Utils";
 
 export interface LootingProps {
   title: string;

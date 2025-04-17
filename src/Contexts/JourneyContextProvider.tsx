@@ -13,8 +13,7 @@ import {
   RuinsEventsEnum,
   UtilEventsEnum,
 } from "@/Types/EventTypes";
-import { Shuffle } from "@/utils/Utils";
-import { generateRandomNumber } from "@/components/Journey/Locations/useGenerateRandoms";
+import { generateRandomNumber, Shuffle } from "@/utils/Utils";
 
 import Fight from "@/components/Journey/Locations/Fighting/Fighting";
 import Looting from "@/components/Journey/Locations/Looting/Looting";

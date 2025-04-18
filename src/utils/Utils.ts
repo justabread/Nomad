@@ -11,6 +11,10 @@ export const Shuffle = <T>(array: Array<T>) => {
   return newArray;
 };
 
+export const generateRandomNumber = (max: number, min: number = 0) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
 export const generateRandomElement = <T>(
   elements: T[],
   previousElement?: T
@@ -26,10 +30,6 @@ export const generateRandomElement = <T>(
   } else {
     return elements[generateRandomNumber(elements.length - 1)];
   }
-};
-
-export const generateRandomNumber = (max: number, min: number = 0) => {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
 export const useRunAway = () => {

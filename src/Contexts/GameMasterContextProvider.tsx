@@ -49,12 +49,12 @@ export const GameMasterContextProvider = ({
         ...prev,
         [property]: newValue,
       }));
-    } else if (newValue < 0) {
+    } else if (newValue <= 0) {
       setPlayer((prev) => ({
         ...prev,
         [property]: 0,
       }));
-    } else {
+    } else if (newValue >= 100) {
       setPlayer((prev) => ({
         ...prev,
         [property]: 100,

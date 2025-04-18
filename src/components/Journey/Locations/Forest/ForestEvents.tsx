@@ -1,6 +1,9 @@
 import {
+  BANDIT_CONSTANTS,
+  BEAR_CONSTANTS,
   COTTAGE_INHABITANT_CONSTANTS,
   EnemyInterface,
+  generateEnemies,
   WOLF_CONSTANTS,
 } from "@/Types/EnemyTypes";
 import { ForestEventsEnum } from "@/Types/EventTypes";
@@ -78,23 +81,202 @@ const EventCalm = () => {
 };
 
 const EventCave = () => {
-  const { handleChangeEvent } = useJourneyContext();
+  const { player, setPlayerHealth, setPlayerFoodItems } =
+    useGameMasterContext();
+  const { handleChangeEvent, InitiateFight } = useJourneyContext();
+  const RunAway = useRunAway();
+
+  const enum CaveEventsEnum {
+    INHABITED,
+    EMPTY,
+  }
+
+  const enum CaveInhabitantsEnum {
+    BANDITS,
+    BEAR,
+    WOLVES,
+  }
+
+  const caveInhabitants = [
+    {
+      id: CaveInhabitantsEnum.BANDITS,
+      name: "Bandits",
+      enemies: generateEnemies({
+        name: "Bandit",
+        min: 2,
+        max: 5,
+        enemyConstants: BANDIT_CONSTANTS,
+      }),
+    },
+    {
+      id: CaveInhabitantsEnum.BEAR,
+      name: "Bear",
+      enemies: generateEnemies({
+        name: "Bear",
+        enemyConstants: BEAR_CONSTANTS,
+      }),
+    },
+    {
+      id: CaveInhabitantsEnum.WOLVES,
+      name: "Wolves",
+      enemies: generateEnemies({
+        name: "Wolf",
+        min: 2,
+        max: 5,
+        enemyConstants: WOLF_CONSTANTS,
+      }),
+    },
+  ];
+
+  const possibleCaveEvents: NameWithComponentInterface<CaveEventsEnum>[] = [
+    {
+      name: CaveEventsEnum.INHABITED,
+      component: () => {
+        const caveInhabitant = generateRandomElement(caveInhabitants);
+        switch (caveInhabitant.id) {
+          case CaveInhabitantsEnum.BANDITS:
+            return (
+              <>
+                <p>
+                  As you enter you find yourself staring down a group of
+                  confused and armed people. For a second, you consider taking a
+                  step back, but by that time it is too late. You ready yourself
+                  for a fight.
+                </p>
+                <button
+                  onClick={() => {
+                    InitiateFight({
+                      startEnemies: caveInhabitant.enemies,
+                    });
+                  }}
+                >
+                  Fight
+                </button>
+                <button
+                  onClick={() => {
+                    RunAway(
+                      caveInhabitant.enemies,
+                      WOLF_CONSTANTS.CHANCE_TO_RUN_FROM
+                    );
+                  }}
+                >
+                  Run
+                </button>
+              </>
+            );
+          case CaveInhabitantsEnum.BEAR:
+            return (
+              <>
+                <p>
+                  The cave is dark, and damp. You stumble around, trying to feel
+                  the walls of the cave, when suddenly, your hand encounters
+                  something soft. By the time you realize it is fur, a deep
+                  growl and two deadly paws make it clear how much of a mistake
+                  you just made.
+                </p>
+                <button
+                  onClick={() => {
+                    InitiateFight({
+                      startEnemies: caveInhabitant.enemies,
+                    });
+                  }}
+                >
+                  Fight
+                </button>
+                <button
+                  onClick={() => {
+                    RunAway(
+                      caveInhabitant.enemies,
+                      WOLF_CONSTANTS.CHANCE_TO_RUN_FROM
+                    );
+                  }}
+                >
+                  Run
+                </button>
+              </>
+            );
+          case CaveInhabitantsEnum.WOLVES:
+            return (
+              <>
+                <p>
+                  Before you even try to step foot inside, a group of wolves
+                  slowly approach, sending you the message that you won&apos;t
+                  be able to explore their home without a fight.
+                </p>
+                <button
+                  onClick={() => {
+                    InitiateFight({
+                      startEnemies: caveInhabitant.enemies,
+                    });
+                  }}
+                >
+                  Fight
+                </button>
+                <button
+                  onClick={() => {
+                    RunAway(
+                      caveInhabitant.enemies,
+                      WOLF_CONSTANTS.CHANCE_TO_RUN_FROM
+                    );
+                  }}
+                >
+                  Run
+                </button>
+              </>
+            );
+          default:
+            return (
+              <>
+                <p>
+                  If you see this text, that means I created a cave inhabitant
+                  with a wrong id.
+                </p>
+              </>
+            );
+        }
+      },
+    },
+    {
+      name: CaveEventsEnum.EMPTY,
+      component: () => {
+        const HP_GAIN = 10;
+        const FOOD_GAIN = 2;
+        return (
+          <>
+            <p>
+              The cave is cold, dark and thankfully, empty. You forage around
+              for a while, make a fire and rest a bit, enjoying the safety,
+              solitude and warmth your fire provides. (+{HP_GAIN} HP, +
+              {FOOD_GAIN} Food)
+            </p>
+            <button
+              onClick={() => {
+                setPlayerHealth(player.health + HP_GAIN);
+                setPlayerFoodItems(player.foodItems + FOOD_GAIN);
+                handleChangeEvent();
+              }}
+            >
+              Continue
+            </button>
+          </>
+        );
+      },
+    },
+  ];
+
+  const RandomCaveEvent = generateRandomElement(possibleCaveEvents).component;
+
   return (
     <div>
       <h2>You stumble upon a dark cave.</h2>
-      <button
-        onClick={() => {
-          handleChangeEvent();
-        }}
-      >
-        Continue
-      </button>
+      <RandomCaveEvent />
     </div>
   );
 };
 
 const EventCottage = () => {
-  const { player, setPlayerHealth } = useGameMasterContext();
+  const { player, setPlayerHealth, setPlayerFoodItems } =
+    useGameMasterContext();
   const { handleChangeEvent, InitiateFight } = useJourneyContext();
   const RunAway = useRunAway();
 
@@ -112,26 +294,31 @@ const EventCottage = () => {
     [
       {
         name: CottageEventsEnum.INHABITANT_CALM,
-        component: () => (
-          <>
-            <p>
-              As you enter, you realize it is not abandoned. Inside, a person
-              sits in front of a lit fireplace, drinking from a stained metal
-              mug. He looks at you, motions towards a chair next to him and
-              turns back towards the fire. You decide to sit with him and rest
-              your body. (+25 HP) After some time, you stand up, wish him luck
-              and return to your journey.
-            </p>
-            <button
-              onClick={() => {
-                setPlayerHealth(player.health + 25);
-                handleChangeEvent();
-              }}
-            >
-              Continue
-            </button>
-          </>
-        ),
+        component: () => {
+          const HP_GAIN = 10;
+          const FOOD_GAIN = 2;
+          return (
+            <>
+              <p>
+                As you enter, you realize it is not abandoned. Inside, a person
+                sits in front of a lit fireplace, drinking from a stained metal
+                mug. He looks at you, motions towards a chair next to him and
+                turns back towards the fire. You decide to sit with him and rest
+                your body. (+{HP_GAIN} HP, +{FOOD_GAIN} Food) After some time,
+                you stand up, wish him luck and return to your journey.
+              </p>
+              <button
+                onClick={() => {
+                  setPlayerHealth(player.health + HP_GAIN);
+                  setPlayerFoodItems(player.foodItems + FOOD_GAIN);
+                  handleChangeEvent();
+                }}
+              >
+                Continue
+              </button>
+            </>
+          );
+        },
       },
       {
         name: CottageEventsEnum.INHABITANT_HOSTILE,
@@ -175,27 +362,33 @@ const EventCottage = () => {
       },
       {
         name: CottageEventsEnum.WOLF_CALM,
-        component: () => (
-          <>
-            <p>
-              You enter the building and see a wounded wolf laying on the floor
-              inside. It notices you, tries to stand up but falls back onto the
-              floor. You notice, that one of it&apos;s paw is wounded. You sit
-              down onto the floor a good distance from it, signaling that you
-              dont&apos;t want any trouble, just rest. The two of you share the
-              time in silence, and after a while, you stand up, nod to the wolf
-              and continue on your way. (+25 HP)
-            </p>
-            <button
-              onClick={() => {
-                setPlayerHealth(player.health + 25);
-                handleChangeEvent();
-              }}
-            >
-              Continue
-            </button>
-          </>
-        ),
+        component: () => {
+          const HP_GAIN = 10;
+          const FOOD_GAIN = 2;
+          return (
+            <>
+              <p>
+                You enter the building and see a wounded wolf laying on the
+                floor inside. It notices you, tries to stand up but falls back
+                onto the floor. You notice, that one of it&apos;s paw is
+                wounded. You sit down onto the floor a good distance from it,
+                signaling that you dont&apos;t want any trouble, just rest. The
+                two of you share the time in silence, and after a while, you
+                stand up, nod to the wolf and continue on your way. (+{HP_GAIN}{" "}
+                HP, +{FOOD_GAIN} Food)
+              </p>
+              <button
+                onClick={() => {
+                  setPlayerHealth(player.health + HP_GAIN);
+                  setPlayerFoodItems(player.foodItems + FOOD_GAIN);
+                  handleChangeEvent();
+                }}
+              >
+                Continue
+              </button>
+            </>
+          );
+        },
       },
       {
         name: CottageEventsEnum.WOLF_HOSTILE,
@@ -235,27 +428,29 @@ const EventCottage = () => {
       },
       {
         name: CottageEventsEnum.EMPTY,
-        component: () => (
-          <>
-            <p>
-              The building is empty, long abandoned by it&apos;s previous
-              inhabitants. Fortunately, there are still enough supplies to make
-              a fire and rest here for a bit, although the loneliness, as usual,
-              does not make for good company. (+10 HP)
-            </p>
-            <button
-              onClick={() => {
-                setPlayerHealth(player.health + 10);
-                handleChangeEvent();
-              }}
-            >
-              Continue
-            </button>
-          </>
-        ),
+        component: () => {
+          const FOOD_GAIN = 2;
+          return (
+            <>
+              <p>
+                The building is empty, long abandoned by it&apos;s previous
+                inhabitants. Fortunately, there are still enough supplies to
+                make a fire and rest here for a bit, although the loneliness, as
+                usual, does not make for good company. (+{FOOD_GAIN} Food)
+              </p>
+              <button
+                onClick={() => {
+                  setPlayerFoodItems(player.foodItems + FOOD_GAIN);
+                  handleChangeEvent();
+                }}
+              >
+                Continue
+              </button>
+            </>
+          );
+        },
       },
     ];
-
   const RandomCottageEvent = generateRandomElement(
     possibleCottageEvents
   ).component;
@@ -268,12 +463,25 @@ const EventCottage = () => {
 };
 
 const EventLake = () => {
+  const { player, setPlayerFoodItems } = useGameMasterContext();
   const { handleChangeEvent } = useJourneyContext();
+  const FOOD_GAIN = generateRandomNumber(6, 0);
   return (
     <div>
       <h2>You stumble upon a lake.</h2>
+      <p>
+        The weather is calm and you see some fishing supplies scattered around.
+        You decide to stay here for a bit and fish.
+      </p>
+      <p>After some hours pass, you take a look at yout haul.</p>
+      {FOOD_GAIN > 0 ? (
+        <p>You caught {FOOD_GAIN} fish(es).</p>
+      ) : (
+        <p>You failed to catch any fish.</p>
+      )}
       <button
         onClick={() => {
+          setPlayerFoodItems(player.foodItems + FOOD_GAIN);
           handleChangeEvent();
         }}
       >
@@ -291,6 +499,19 @@ const EventWolves = () => {
     HUNGRY,
     ANGRY,
   }
+
+  const randomWolfNumber = generateRandomNumber(3, 5);
+
+  const RunAway = useRunAway();
+
+  const enemies: EnemyInterface[] = Array.from(
+    { length: randomWolfNumber },
+    (_, i) => ({
+      name: `Wolf ${i}`,
+      health: GenerateRandomHealth(WOLF_CONSTANTS.MAX_HEALTH),
+      maxDamage: WOLF_CONSTANTS.MAX_DAMAGE,
+    })
+  );
   const possibleWolfNeeds: NameWithComponentInterface<WolfNeeds>[] = [
     {
       name: WolfNeeds.HUNGRY,
@@ -301,6 +522,15 @@ const EventWolves = () => {
             some of your food.
           </p>
           <div>
+            <button
+              onClick={() => {
+                InitiateFight({
+                  startEnemies: enemies,
+                });
+              }}
+            >
+              Fight
+            </button>
             <button
               onClick={() => {
                 if (player.foodItems > 0) {
@@ -355,24 +585,12 @@ const EventWolves = () => {
     },
   ];
 
-  const randomDogsNumber = generateRandomNumber(3, 5);
-
-  const RandomDogNeed = generateRandomElement(possibleWolfNeeds);
-  const RunAway = useRunAway();
-
-  const enemies: EnemyInterface[] = Array.from(
-    { length: randomDogsNumber },
-    (_, i) => ({
-      name: `Wolf ${i}`,
-      health: GenerateRandomHealth(WOLF_CONSTANTS.MAX_HEALTH),
-      maxDamage: WOLF_CONSTANTS.MAX_DAMAGE,
-    })
-  );
+  const RandomWolfNeed = generateRandomElement(possibleWolfNeeds);
 
   return (
     <div>
-      <h2>You encounter a pack of {randomDogsNumber} wolves.</h2>
-      <RandomDogNeed.component />
+      <h2>You encounter a pack of {randomWolfNumber} wolves.</h2>
+      <RandomWolfNeed.component />
     </div>
   );
 };

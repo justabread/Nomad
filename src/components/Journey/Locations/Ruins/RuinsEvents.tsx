@@ -307,38 +307,42 @@ const EventDogs = () => {
   const possibleDogNeeds: NameWithComponentInterface<DogNeeds>[] = [
     {
       name: DogNeeds.HUNGRY,
-      component: () => (
-        <>
-          <p>
-            The are about to attack but you might be able to calm them down with
-            some of your food.
-          </p>
-          <div>
-            <button
-              onClick={() => {
-                if (player.foodItems > 0) {
-                  handleChangeEvent();
-                } else {
-                  InitiateFight({
-                    startEnemies: enemies,
-                    initialEventMessage:
-                      "You failed to find anything edible in your backpack. The dogs did not take this well.",
-                  });
-                }
-              }}
-            >
-              Give them food
-            </button>
-            <button
-              onClick={() => {
-                RunAway(enemies, DOG_CONSTANTS.CHANCE_TO_RUN_FROM);
-              }}
-            >
-              Run
-            </button>
-          </div>
-        </>
-      ),
+      component: () => {
+        const FOOD_LOSS = 2;
+        return (
+          <>
+            <p>
+              The are about to attack but you might be able to calm them down
+              with some of your food.
+            </p>
+            <div>
+              <button
+                onClick={() => {
+                  if (player.foodItems > 0) {
+                    setPlayerFoodItems(player.foodItems - FOOD_LOSS);
+                    handleChangeEvent();
+                  } else {
+                    InitiateFight({
+                      startEnemies: enemies,
+                      initialEventMessage:
+                        "You failed to find anything edible in your backpack. The dogs did not take this well.",
+                    });
+                  }
+                }}
+              >
+                Give them food
+              </button>
+              <button
+                onClick={() => {
+                  RunAway(enemies, DOG_CONSTANTS.CHANCE_TO_RUN_FROM);
+                }}
+              >
+                Run
+              </button>
+            </div>
+          </>
+        );
+      },
     },
     {
       name: DogNeeds.PETS,
@@ -351,26 +355,10 @@ const EventDogs = () => {
           <div>
             <button
               onClick={() => {
-                if (player.foodItems > 0) {
-                  setPlayerFoodItems(player.foodItems - 2);
-                  handleChangeEvent();
-                } else {
-                  InitiateFight({
-                    startEnemies: enemies,
-                    initialEventMessage:
-                      "You failed to find anything edible in your backpack. The dogs did not take this well.",
-                  });
-                }
+                handleChangeEvent();
               }}
             >
-              Give them some food
-            </button>
-            <button
-              onClick={() => {
-                RunAway(enemies, DOG_CONSTANTS.CHANCE_TO_RUN_FROM);
-              }}
-            >
-              Run
+              Continue
             </button>
           </div>
         </>

@@ -65,7 +65,7 @@ const Fight = ({ startEnemies, initialEventMessage }: FightingProps) => {
 
   const [enemies, setEnemies] = useState<EnemyInterface[]>(startEnemies);
 
-  const { player, setPlayerHealth, setPlayerHealthItems } =
+  const { player, setPlayer, setPlayerHealth, setPlayerHealthItems } =
     useContext(GameMasterContext);
 
   const { handleChangeEvent } = useJourneyContext();
@@ -75,10 +75,14 @@ const Fight = ({ startEnemies, initialEventMessage }: FightingProps) => {
   };
 
   const EnemyTurn = () => {
-    FindValidEnemies(enemies).map((enemy) => {
+    FindValidEnemies(enemies).forEach((enemy) => {
       const inflictedDamage = generateRandomNumber(enemy.maxDamage, 0);
 
-      setPlayerHealth(player.health - inflictedDamage);
+      //BECAUSE OF STATE UPDATE QUEUEING I NEED TO USE SETPLAYER DIRECTLY, DOES NOT WORK WITH SETPLAYERHEALTH
+      setPlayer((prev) => ({
+        ...prev,
+        health: prev.health - inflictedDamage,
+      }));
 
       if (inflictedDamage > 0) {
         QueueEvent(
